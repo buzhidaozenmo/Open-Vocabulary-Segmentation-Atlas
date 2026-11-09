@@ -44,6 +44,61 @@ sources:
   locator: v1 Approach / Table 1、4
 - url: https://github.com/hustvl/EOVSAM
   locator: 官方 README / 公开目录；未运行
+figures:
+- id: fig2
+  asset: assets/figures/eovsam-fig2.png
+  label: Figure 2
+  page: 3
+  version: arXiv 2608.02284v1
+  source_url: https://arxiv.org/pdf/2608.02284v1
+  clip_pdf_points:
+  - 51
+  - 45
+  - 560
+  - 248
+  source_sha256: e64284eb685abdf944e639233235d3090fae775a38d4e92e1763ace1385081c6
+- id: fig3
+  asset: assets/figures/eovsam-fig3.png
+  label: Figure 3
+  page: 4
+  version: arXiv 2608.02284v1
+  source_url: https://arxiv.org/pdf/2608.02284v1
+  clip_pdf_points:
+  - 316
+  - 45
+  - 561
+  - 452
+  source_sha256: e64284eb685abdf944e639233235d3090fae775a38d4e92e1763ace1385081c6
+methods:
+- id: aggregation
+  track: vocabulary
+  problems:
+  - alignment
+  - regions
+  title: 单次掩码生成与注意力语义聚合
+  question: 怎样避免每个文本类别重复运行 SAM3？
+  operation: 用共享骨干并行产生 SAM 与 SigLIP 特征；移除文本条件的掩码生成依赖，单次解码得到掩码及可学习注意力；按注意力聚合 SigLIP 特征，再与目标类别的 SigLIP 文本嵌入做余弦分类。
+  input: 图像、目标类别文本
+  output: 多个掩码及开放词汇类别分数
+  stage: 训练与单次前向推理
+  supervision: 预训练 SAM3／SigLIP2 对齐骨干和 COCO Panoptic 掩码监督
+  origin: modified
+  origin_note: 在 SAM3 上修改骨干与解码分类流程；Attentional Aggregation 为本文设计。
+  origin_refs:
+  - url: https://arxiv.org/abs/2511.16719
+    locator: EOVSAM §3 以 SAM3 为基础
+  evidence:
+  - url: https://arxiv.org/pdf/2608.02284v1
+    locator: §3，Figure 2–3
+  figure: fig3
+  figure_guide: 独立聚合比较图看 (c) Attentional Aggregation，并保留梯度流图例；总流程另见 Figure 2。
+  depicted: true
+  route:
+  - 二维区域特征
+  - 注意力区域聚合
+  - 实例特征
+  - 文本相似度分类
+module_checked_on: '2026-11-09'
 ---
 # EOVSAM
 

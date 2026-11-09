@@ -43,6 +43,99 @@ sources:
   locator: v1 §3 / Table 6、10、12
 - url: https://github.com/zdk258/CorrCLIP/tree/master/CorrCLIPv2
   locator: 官方 README / 公开目录；未运行
+figures:
+- id: fig3
+  asset: assets/figures/corrclipv2-fig3.png
+  label: Figure 3
+  page: 7
+  version: arXiv 2610.24757v1
+  source_url: https://arxiv.org/pdf/2610.24757v1
+  clip_pdf_points:
+  - 64
+  - 45
+  - 525
+  - 290
+  source_sha256: 66138d73fa96404748dd529cf7c8ab929e937871419c2ed391e10a5171bea59d
+- id: fig6
+  asset: assets/figures/corrclipv2-fig6.png
+  label: Figure 6
+  page: 10
+  version: arXiv 2610.24757v1
+  source_url: https://arxiv.org/pdf/2610.24757v1
+  clip_pdf_points:
+  - 72
+  - 45
+  - 293
+  - 206
+  source_sha256: 66138d73fa96404748dd529cf7c8ab929e937871419c2ed391e10a5171bea59d
+- id: fig7
+  asset: assets/figures/corrclipv2-fig7.png
+  label: Figure 7
+  page: 10
+  version: arXiv 2610.24757v1
+  source_url: https://arxiv.org/pdf/2610.24757v1
+  clip_pdf_points:
+  - 310
+  - 45
+  - 532
+  - 185
+  source_sha256: 66138d73fa96404748dd529cf7c8ab929e937871419c2ed391e10a5171bea59d
+methods:
+- id: correlation
+  track: vocabulary
+  problems:
+  - alignment
+  - regions
+  title: 重建 CLIP 的关联范围和关联值
+  question: 图像级 CLIP 特征如何变成像素预测？
+  operation: 用类别无关区域掩码限制 patch 交互范围，以自监督视觉模型的相似性重建相关值；聚合 CLIP 值特征，经过空间／语义分支细化后，与类别文本嵌入比较，并利用区域掩码更新预测。
+  input: 图像、CLIP 与视觉基础模型特征、区域掩码
+  output: 密集语言对齐特征与分割图
+  stage: 推理
+  supervision: 冻结预训练模型；该流程不做参数训练
+  origin: modified
+  origin_note: CorrCLIPv2 沿用 CorrCLIP 单图像基础流程；新增跨图检索另列。
+  origin_refs:
+  - url: https://arxiv.org/abs/2411.10086
+    locator: CorrCLIPv2 文中 CorrCLIP 单图基础方法
+  evidence:
+  - url: https://arxiv.org/pdf/2610.24757v1
+    locator: §3.2.1–3.2.3，Figure 3
+  figure: fig3
+  figure_guide: 总图上方 Scope Reconstruction 与 Value Reconstruction 两条路径，再看输出与 Textual Encoder 的匹配。
+  depicted: true
+  route:
+  - 二维密集特征
+  - 相关性重建
+  - 二维密集特征
+  - 文本相似度分类
+- id: retrieval
+  track: vocabulary
+  problems:
+  - alignment
+  - reliability
+  title: 视觉键检索、语言语义值回读
+  question: 如何用跨图同类实例减轻单图上下文偏差？
+  operation: 离线在同一区域内分别池化 VFM 特征与 CorrCLIP 特征，保存为索引键和语义值；在线以 VFM 区域特征检索 top-k 邻居，将对应语义值平均成支持集，再用于语义增强。
+  input: 无标注图像库、当前图像区域特征
+  output: 跨图语义支持特征
+  stage: 离线建库＋在线检索
+  supervision: 预训练模型与无标注图库；无新增参数训练
+  origin: proposed
+  origin_note: 本文 VFM-Indexed Semantic Retrieval；普通 MAP 池化并非本文独创。
+  origin_refs: []
+  evidence:
+  - url: https://arxiv.org/pdf/2610.24757v1
+    locator: §3.3.2，Eq.12–13，Figure 6–7
+  figure: fig7
+  figure_guide: 独立在线检索图：MAP→Search Top-K→Retrieve CorrCLIP Features→Mean；离线建库见同文 Figure 6。
+  depicted: true
+  route:
+  - 跨图语义库
+  - 视觉键语义值检索
+  - 区域语义原型
+  - 语义增强
+module_checked_on: '2026-11-09'
 ---
 # CorrCLIPv2
 

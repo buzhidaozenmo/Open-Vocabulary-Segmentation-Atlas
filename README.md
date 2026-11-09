@@ -1,6 +1,6 @@
 # Open-Vocabulary Segmentation Research Atlas
 
-以 3D 点云为重点的中文开放词汇分割科研知识库：梳理研究问题、方法、评测设置与有证据的技术关系。
+以研究关注点组织的中文开放词汇分割知识库：通过交互路线图比较开放词汇的实现，以及点云多视角语义传递与几何区域处理。
 
 **[浏览知识库网站 →](https://buzhidaozenmo.github.io/Open-Vocabulary-Segmentation-Atlas/)**
 
@@ -28,7 +28,7 @@
 | **RegionPLC**<br>[RegionPLC: Regional Point-Language Contrastive Learning for Open-World 3D Scene Understanding](https://arxiv.org/abs/2304.00962) | [CVPR 2024](https://openaccess.thecvf.com/content/CVPR2024/papers/Yang_RegionPLC_Regional_Point-Language_Contrastive_Learning_for_Open-World_3D_Scene_Understanding_CVPR_2024_paper.pdf) | 以区域级语言监督与对比学习建立更密集的三维语言关联。 | ✅ [Code](https://github.com/CVMI-Lab/PLA/tree/regionplc)<br>实际实现位于 regionplc 分支；与 PLA 主分支分开。 | [索引](docs/papers/regionplc.md) |
 | **OpenMask3D**<br>[OpenMask3D: Open-Vocabulary 3D Instance Segmentation](https://arxiv.org/abs/2306.13631) | [NeurIPS 2023](https://proceedings.neurips.cc/paper_files/paper/2023/hash/d77b5482e38339a8068791d939126be2-Abstract-Conference.html) | 用类别无关三维实例掩码和多视角区域特征进行开放词汇实例分割。 | ✅ [Code](https://github.com/OpenMask3D/openmask3d)<br>公开特征提取、聚合与评测流程；依赖3D掩码模型、SAM等外部权重。 | [索引](docs/papers/openmask3d.md) |
 | **OpenScene**<br>[OpenScene: 3D Scene Understanding with Open Vocabularies](https://arxiv.org/abs/2211.15654) | [CVPR 2023](https://openaccess.thecvf.com/content/CVPR2023/html/Peng_OpenScene_3D_Scene_Understanding_With_Open_Vocabularies_CVPR_2023_paper.html) | 多视角二维特征如何成为可供文本查询的三维点特征。 | ✅ [Code](https://github.com/pengsongyou/openscene)<br>官方实现包含多视角融合、3D蒸馏与评测；提供预训练模型及预处理特征入口。 | [样例笔记](docs/papers/openscene.md) |
-| **PLA**<br>[PLA: Language-Driven Open-Vocabulary 3D Scene Understanding](https://arxiv.org/abs/2211.16321) | [CVPR 2023](https://github.com/CVMI-Lab/PLA) | 通过点云与语言关联构建三维开放词汇能力，作为蒸馏路线的对照。 | ✅ [Code](https://github.com/CVMI-Lab/PLA)<br>官方 main 分支包含实现；有数据准备、训练推理及模型文档。具体监督设置待精读。 | [索引](docs/papers/pla.md) |
+| **PLA**<br>[PLA: Language-Driven Open-Vocabulary 3D Scene Understanding](https://arxiv.org/abs/2211.16312) | [CVPR 2023](https://openaccess.thecvf.com/content/CVPR2023/html/Ding_PLA_Language-Driven_Open-Vocabulary_3D_Scene_Understanding_CVPR_2023_paper.html) | 通过点云与语言关联构建三维开放词汇能力，作为蒸馏路线的对照。 | ✅ [Code](https://github.com/CVMI-Lab/PLA)<br>官方 main 分支包含实现、数据准备和训练推理文档；训练使用基类三维标注与图像生成的语言监督。 | [索引](docs/papers/pla.md) |
 
 <a id="papers-2d"></a>
 
@@ -46,7 +46,7 @@
 
 | 论文 | 发表 | 研究内容 | 官方代码与开放情况 | 笔记 |
 | --- | --- | --- | --- | --- |
-| **EntitySAM**<br>[EntitySAM: Segment Everything in Video](https://openaccess.thecvf.com/content/CVPR2025/papers/Ye_EntitySAM_Segment_Everything_in_Video_CVPR_2025_paper.pdf) | [CVPR 2025](https://openaccess.thecvf.com/content/CVPR2025/papers/Ye_EntitySAM_Segment_Everything_in_Video_CVPR_2025_paper.pdf) | 以SAM2扩展自动发现和跟踪视频实体；作为类别无关相关任务参考。 | ✅ [Code](https://github.com/ymq2017/entitysam)<br>训练代码、评测代码和检查点已发布；核心任务不是文本类别驱动的OVSS。 | [索引](docs/papers/entitysam.md) |
+| **EntitySAM**<br>[EntitySAM: Segment Everything in Video](https://openaccess.thecvf.com/content/CVPR2025/papers/Ye_EntitySAM_Segment_Everything_in_Video_CVPR_2025_paper.pdf) | [CVPR 2025](https://openaccess.thecvf.com/content/CVPR2025/papers/Ye_EntitySAM_Segment_Everything_in_Video_CVPR_2025_paper.pdf) | 以SAM2扩展自动发现和跟踪视频实体；作为类别无关相关任务参考。 | ✅ [Code](https://github.com/ymq2017/entitysam)<br>实体训练、评测代码与检查点已公开；论文的类别命名依赖外部 GPT-4o，不属于开源实体模型本体。 | [索引](docs/papers/entitysam.md) |
 | **TROY-VIS**<br>[Towards Real-Time Open-Vocabulary Video Instance Segmentation](https://arxiv.org/abs/2412.04434) | [WACV 2025](https://openaccess.thecvf.com/content/WACV2025/papers/Yan_Towards_Real-Time_Open-Vocabulary_Video_Instance_Segmentation_WACV_2025_paper.pdf) | 通过解耦特征增强、文本缓存与时序插值平衡视频分割精度和速度。 | ✅ [Code](https://github.com/google-research/troyvis)<br>提供实际实现、训练测试文档与模型列表入口。 | [索引](docs/papers/troyvis.md) |
 
 <a id="papers-multiview"></a>
@@ -65,6 +65,13 @@
 | 论文 | 发表 | 研究内容 | 官方代码与开放情况 | 笔记 |
 | --- | --- | --- | --- | --- |
 | **LangSplatV2**<br>[LangSplatV2: High-dimensional 3D Language Gaussian Splatting with 450+ FPS](https://arxiv.org/abs/2507.07136) | [NeurIPS 2025](https://langsplat-v2.github.io/) | 用高效的高维语言高斯表示改善场景文本查询的精度与速度。 | ✅ [Code](https://github.com/ZhaoYujie2002/LangSplatV2)<br>官方仓库提供预处理、训练、多个数据集评测流程及模型/数据入口。 | [索引](docs/papers/langsplatv2.md) |
+
+## 两条阅读主线
+
+- [开放词汇能力如何实现](https://buzhidaozenmo.github.io/Open-Vocabulary-Segmentation-Atlas/?track=vocabulary)：文本编码、视觉语言对齐、区域预测、视频和语言场。
+- [点云语义如何构建与优化](https://buzhidaozenmo.github.io/Open-Vocabulary-Segmentation-Atlas/?track=pointcloud)：投影、多视角融合、教师可靠性、蒸馏与几何区域处理。
+
+点击路线节点或连线筛选方法，展开查看具体操作、原图和证据。模块在上方各篇论文笔记的元数据维护。
 
 ## 数据集与方法比较
 
@@ -98,6 +105,7 @@ python3 -m venv .codex_tmp/venv
 | 路径 | 用途 |
 | --- | --- |
 | `docs/papers/` | 每篇论文的唯一数据源：YAML 元数据 + Markdown 笔记 |
+| `docs/assets/figures/` | 带来源与版本记录的论文原图提取 |
 | `data/` | 受控技术词表、数据集与论文关系 |
 | `templates/` | 论文、方法和评测记录模板 |
 | `scripts/` | 校验与页面生成 |
@@ -113,6 +121,8 @@ python3 -m venv .codex_tmp/venv
 
 README 的分类清单和网站使用同一份论文元数据。更新脚本只替换清单区，保留其他说明；构建会检查二者是否同步。
 
+每篇论文的 `methods` 记录问题、具体操作、输入输出、使用阶段、监督、方法来源和证据；`figures` 记录图号、页码、原文版本、链接、裁切坐标与源文件 SHA256。网站自动生成路线、比较表和论文页模块说明。方法来源不明时标记未核实；不要求模块属于论文核心创新。
+
 GitHub Pages 使用 Actions 部署；仓库 About 的 Website 与本 README 指向相同地址。构建失败时保留上一次成功部署。
 
 ## 证据与版权
@@ -120,3 +130,5 @@ GitHub Pages 使用 Actions 部署；仓库 About 的 Website 与本 README 指�
 笔记区分原文事实、官方文档说明、分析推断和待验证问题。引用结果均是论文报告值，不是本仓库复现值。正式出版版本与所读预印本版本分别记录。
 
 本仓库不分发论文 PDF、数据集或模型权重；原文和代码遵循各自许可。原创笔记与脚本的使用许可见 [LICENSE](LICENSE)。
+
+提取的论文原图版权归原作者，附原始出处，不纳入原创内容许可。交互结构参考 [4DGS 研究路线页](https://joen.site/4dgs-survey/zh/methods/routes)，本站按上述两条阅读主线独立实现。

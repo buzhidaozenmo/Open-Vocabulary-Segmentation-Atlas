@@ -35,12 +35,92 @@ sources:
   locator: 正式发表来源
 - url: https://github.com/yifeisu/OV-Octree-Graph
   locator: 官方 README / 公开目录；未运行
+figures:
+- id: fig2
+  asset: assets/figures/octreegraph-fig2.png
+  label: Figure 2
+  page: 3
+  version: arXiv 2411.16253v2
+  source_url: https://arxiv.org/pdf/2411.16253v2
+  clip_pdf_points:
+  - 56
+  - 45
+  - 556
+  - 310
+  source_sha256: c38b5fc602bacf464d0606523e2ac025fee57424d5fdc5b12488df8e938b81d5
+- id: fig3
+  asset: assets/figures/octreegraph-fig3.png
+  label: Figure 3
+  page: 3
+  version: arXiv 2411.16253v2
+  source_url: https://arxiv.org/pdf/2411.16253v2
+  clip_pdf_points:
+  - 317
+  - 391
+  - 550
+  - 448
+  source_sha256: c38b5fc602bacf464d0606523e2ac025fee57424d5fdc5b12488df8e938b81d5
+methods:
+- id: cgsm
+  track: pointcloud
+  problems:
+  - projection
+  - multiview
+  - regions
+  title: 按时间分组的三维实例合并
+  question: 不同视角的区域如何合并而避免欠分割扩散？
+  operation: 将按时间排列的视图分组，投影区域得到三维片段；依据几何重叠与视觉／描述相似性合并，先组内再按序跨组合并；利用特征方差识别并剔除欠分割片段。
+  input: 带位姿 RGB-D、二维区域及语义特征
+  output: 跨视图一致三维实例
+  stage: 地图构建／推理
+  supervision: 预训练掩码及视觉语言模型；需要相机位姿
+  origin: proposed
+  origin_note: 本文 Chronological Group-wise Segment Merging；投影操作不是本文独创。
+  origin_refs: []
+  evidence:
+  - url: https://arxiv.org/pdf/2411.16253v2
+    locator: §3.1–3.3，Figure 2–3
+  figure: fig3
+  figure_guide: 独立图看时间分组和前一组合并结果的递推；具体几何／语义阈值按 §3.3。
+  depicted: true
+  route:
+  - 二维区域特征
+  - 时序分组区域合并
+  - 三维实例片段
+  - 二维到三维传递
+- id: ifa
+  track: vocabulary
+  problems:
+  - alignment
+  - reliability
+  title: 兼顾实例内部与相邻实例的特征聚合
+  question: 三维实例的开放词汇特征如何聚合并区分邻居？
+  operation: 先求实例特征中心；依据特征对本实例中心的相似度奖励一致观测，并减去对相似邻居中心的响应，softmax 归一化后加权聚合；视觉和描述特征分别处理，再融合用于文本查询。
+  input: 每实例多视角视觉／描述特征、邻居实例
+  output: 可文本查询的实例嵌入
+  stage: 地图构建与查询
+  supervision: 预训练视觉语言模型；无新增类别标签
+  origin: proposed
+  origin_note: 本文 Instance Feature Aggregation；本模块归开放词汇表示主线，而非按三维表示自动归点云。
+  origin_refs: []
+  evidence:
+  - url: https://arxiv.org/pdf/2411.16253v2
+    locator: §3.4，Figure 2(b)
+  figure: fig2
+  figure_guide: 看总图中下方 IFA：实例内部奖励、实例之间惩罚及视觉／描述融合。
+  depicted: true
+  route:
+  - 二维区域特征
+  - 实例内外对比聚合
+  - 实例特征
+  - 文本相似度分类
+module_checked_on: '2026-11-09'
 ---
 # OV-Octree-Graph
 
 ## 当前整理状态
 
-本条目仅完成索引与来源核查，尚未按完整模板精读；不据此生成方法继承关系或实验排名。
+已按研究关注点核查下列方法模块与配图；尚未完成全文样例笔记，不据此生成实验排名。
 
 ## 收录理由
 
@@ -49,7 +129,3 @@ sources:
 ## 开源情况
 
 【官方文档说明】公开实例构建、特征聚合及运行脚本；需外部二维模型与依赖。 本轮没有安装或运行代码，没有独立验证权重下载。
-
-## 后续核查
-
-核对输入输出、训练监督、推理输入、版本、评测协议和原文图表。作者完整列表与预印本日期未填写时表示尚未核查，不能解释为论文没有作者或预印本。

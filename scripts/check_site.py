@@ -44,6 +44,17 @@ records = json.loads((ROOT / 'assets/papers.json').read_text())
 for record in records:
     if not (ROOT / record['url'] / 'index.html').exists():
         errors.append('Missing paper: ' + record['paper_id'])
+methods = json.loads((ROOT / 'assets/methods.json').read_text())['methods']
+ids = set()
+for method in methods:
+    if method['uid'] in ids:
+        errors.append('Duplicate module: ' + method['uid'])
+    ids.add(method['uid'])
+    note = (ROOT / 'papers' / method['paper_id'] / 'index.html').resolve()
+    if 'method-' + method['id'] not in documents[note].ids:
+        errors.append('Missing module anchor: ' + method['uid'])
+    if 'detail-' + method['paper_id'] + '-' + method['id'] not in documents[(ROOT / 'index.html').resolve()].ids:
+        errors.append('Missing inline module: ' + method['uid'])
 if errors:
     raise SystemExit('\n'.join(errors))
-print(f'HTML links and {len(records)} index destinations verified.')
+print(f'HTML links, {len(records)} papers and {len(methods)} module destinations verified.')

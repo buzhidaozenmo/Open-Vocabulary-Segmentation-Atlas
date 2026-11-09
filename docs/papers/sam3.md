@@ -33,12 +33,80 @@ sources:
   locator: 正式发表来源
 - url: https://github.com/facebookresearch/sam3
   locator: 官方 README / 公开目录；未运行
+figures:
+- id: fig4
+  asset: assets/figures/sam3-fig4.png
+  label: Figure 4
+  page: 4
+  version: arXiv 2511.16719v2
+  source_url: https://arxiv.org/pdf/2511.16719v2
+  clip_pdf_points:
+  - 68
+  - 45
+  - 545
+  - 205
+  source_sha256: 19e8a44e7fc33bc6cf237f6b4ac3948a79b33f7ffc62d09012fcac6fc9fb016f
+methods:
+- id: concept
+  track: vocabulary
+  problems:
+  - alignment
+  - unseen
+  title: 概念条件检测与独立存在性判断
+  question: 文本概念如何影响掩码，而不是事后固定类别分类？
+  operation: 图像特征与文本／示例提示经融合编码器交互；检测查询产生匹配实例的框、分数与掩码，独立 presence token 估计概念是否存在，减少把定位质量和语义存在性混在一个分数中的问题。
+  input: 图像、短文本概念或图像示例
+  output: 概念匹配实例掩码及存在性分数
+  stage: 训练与推理
+  supervision: 大规模概念—图像／视频掩码数据及预训练视觉语言骨干
+  origin: proposed
+  origin_note: 本文的概念分割检测器与 presence token；主图为概览。
+  origin_refs: []
+  evidence:
+  - url: https://arxiv.org/pdf/2511.16719v2
+    locator: §2–3，Figure 4；附录 C.1，Figure 10
+  figure: fig4
+  figure_guide: 看提示编码器→融合编码器→检测器分支；presence token 的细节在附录 Figure 10，概览没有独立展开。
+  depicted: true
+  route:
+  - 概念文本与示例
+  - 概念条件跨模态交互
+  - 实例掩码
+  - 概念条件分割
+- id: tracking
+  track: vocabulary
+  problems:
+  - temporal
+  title: 概念检测与对象记忆跟踪协作
+  question: 视频中新出现的概念实例如何进入并保持身份？
+  operation: 检测器逐帧识别概念匹配对象，跟踪器根据对象记忆传播掩码；关联两路结果，接入新检测并维护现有对象身份，结合时序后处理稳定输出。
+  input: 视频帧、概念提示、对象记忆
+  output: 带身份的概念实例 masklets
+  stage: 推理；组件经训练
+  supervision: 概念视频标注与预训练跟踪能力
+  origin: modified
+  origin_note: 本文概念检测器与基于 SAM2 的跟踪器协同；不是仅用固定首帧掩码传播。
+  origin_refs:
+  - url: https://arxiv.org/abs/2408.00714
+    locator: SAM3 原文引用 SAM2 跟踪架构
+  evidence:
+  - url: https://arxiv.org/pdf/2511.16719v2
+    locator: §3，附录 C.2，Figure 4
+  figure: fig4
+  figure_guide: 看检测器与底部 memory / tracker 的连接及输出视频掩码。
+  depicted: true
+  route:
+  - 概念文本与示例
+  - 检测与记忆关联
+  - 视频实体记忆
+  - 跨帧语义保持
+module_checked_on: '2026-11-09'
 ---
 # SAM3
 
 ## 当前整理状态
 
-本条目仅完成索引与来源核查，尚未按完整模板精读；不据此生成方法继承关系或实验排名。
+已按研究关注点核查下列方法模块与配图；尚未完成全文样例笔记，不据此生成实验排名。
 
 ## 收录理由
 
@@ -48,8 +116,5 @@ sources:
 
 【官方文档说明】提供推理、微调、示例与检查点入口；权重需按官方访问与许可流程获取。 本轮没有安装或运行代码，没有独立验证权重下载。
 
-## 后续核查
-
-核对输入输出、训练监督、推理输入、版本、评测协议和原文图表。作者完整列表与预印本日期未填写时表示尚未核查，不能解释为论文没有作者或预印本。
 
 > 本条目主要归入2D，但同时具有视频模态标签；全站仅计一次。概念提示分割与标准OVSS评测分别记录。

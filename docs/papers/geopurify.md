@@ -1,7 +1,6 @@
 ---
 paper_id: geopurify
-title: 'GeoPurify: A Data-Efficient Geometric Distillation Framework for Open-Vocabulary
-  3D Segmentation'
+title: 'GeoPurify: A Data-Efficient Geometric Distillation Framework for Open-Vocabulary 3D Segmentation'
 short_name: GeoPurify
 authors:
 - Weijia Dou
@@ -45,6 +44,87 @@ sources:
   locator: v2 §3 / Table 1、4
 - url: https://github.com/tj12323/GeoPurify
   locator: 官方 README / 公开目录；未运行
+figures:
+- id: fig2
+  asset: assets/figures/geopurify-fig2.png
+  label: Figure 2
+  page: 4
+  version: arXiv 2510.02186v2
+  source_url: https://arxiv.org/pdf/2510.02186v2
+  clip_pdf_points:
+  - 105
+  - 45
+  - 508
+  - 279
+  source_sha256: 868135fd90ca1dd03ea3b9770604d6e6c54cdd551ecf07bdd11f1a3f0880678d
+- id: fig3
+  asset: assets/figures/geopurify-fig3.png
+  label: Figure 3
+  page: 19
+  version: arXiv 2510.02186v2
+  source_url: https://arxiv.org/pdf/2510.02186v2
+  clip_pdf_points:
+  - 140
+  - 336
+  - 468
+  - 463
+  source_sha256: 868135fd90ca1dd03ea3b9770604d6e6c54cdd551ecf07bdd11f1a3f0880678d
+methods:
+- id: geometry
+  track: pointcloud
+  problems:
+  - distillation
+  - geometry
+  title: 先蒸馏几何关系，再净化语义
+  question: 如何在不学习类别标签时获得可靠几何亲和力？
+  operation: 冻结三维自监督教师，用全局与局部对比目标训练轻量学生亲和网络；学生只从点云学习几何关系，为之后的语义池化提供邻接权重。
+  input: 点云、冻结三维自监督教师
+  output: 逐点几何嵌入与亲和力
+  stage: 训练
+  supervision: 三维自监督教师；不需要三维语义标签
+  origin: modified
+  origin_note: 在已有三维自监督表征上训练本文的几何亲和学生；教师为 Sonata。
+  origin_refs:
+  - url: https://arxiv.org/abs/2503.16429
+    locator: GeoPurify 原文引用 Sonata（Wu et al., 2025）
+  evidence:
+  - url: https://arxiv.org/pdf/2510.02186v2
+    locator: §3.2，Figure 2
+  figure: fig2
+  figure_guide: 看左侧虚线训练路径：点云、冻结教师、学生亲和网络、对比蒸馏。
+  depicted: true
+  route:
+  - 三维几何先验
+  - 几何关系蒸馏
+  - 几何亲和力
+  - 语义净化
+- id: pooling
+  track: pointcloud
+  problems:
+  - geometry
+  - regions
+  title: 几何亲和力引导的迭代语义池化
+  question: 多视角语义已经映射到点上后如何去噪？
+  operation: 在局部邻域根据几何嵌入余弦相似度构造锐化、归一化亲和矩阵 A，重复执行 F←AF；高亲和邻居传递语义，弱连接抑制跨结构污染。
+  input: 初始逐点语义、几何亲和矩阵
+  output: 净化后的逐点语义
+  stage: 推理
+  supervision: 已训练亲和网络与二维语言教师；无额外语义标签
+  origin: proposed
+  origin_note: 本文的 Geometry-Guided Pooling；不是重新训练二维语义教师。
+  origin_refs: []
+  evidence:
+  - url: https://arxiv.org/pdf/2510.02186v2
+    locator: §3.3–3.4，附录 D.1，Figure 3
+  figure: fig3
+  figure_guide: 独立池化图：保留绿／灰亲和边图例，按初始特征→局部邻域→净化特征阅读。
+  depicted: true
+  route:
+  - 二维与三维语义
+  - 几何亲和池化
+  - 逐点特征
+  - 语义净化
+module_checked_on: '2026-11-09'
 ---
 # GeoPurify
 

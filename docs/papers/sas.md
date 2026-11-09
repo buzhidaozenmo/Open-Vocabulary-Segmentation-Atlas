@@ -47,6 +47,154 @@ sources:
   locator: v1 §3 / Table 1、3
 - url: https://github.com/peoplelu/SAS
   locator: 官方 README / 公开目录；未运行
+figures:
+- id: fig2
+  asset: assets/figures/sas-fig2.png
+  label: Figure 2
+  page: 3
+  version: arXiv 2503.08512v1
+  source_url: https://arxiv.org/pdf/2503.08512v1
+  clip_pdf_points:
+  - 56
+  - 45
+  - 556
+  - 351
+  source_sha256: 9f50e30794266863762c6fc79f2b8a440bf0a7a6622b107dddb70ce5b0f6e457
+- id: fig3
+  asset: assets/figures/sas-fig3.png
+  label: Figure 3
+  page: 4
+  version: arXiv 2503.08512v1
+  source_url: https://arxiv.org/pdf/2503.08512v1
+  clip_pdf_points:
+  - 56
+  - 45
+  - 298
+  - 221
+  source_sha256: 9f50e30794266863762c6fc79f2b8a440bf0a7a6622b107dddb70ce5b0f6e457
+- id: fig4
+  asset: assets/figures/sas-fig4.png
+  label: Figure 4
+  page: 5
+  version: arXiv 2503.08512v1
+  source_url: https://arxiv.org/pdf/2503.08512v1
+  clip_pdf_points:
+  - 56
+  - 45
+  - 556
+  - 235
+  source_sha256: 9f50e30794266863762c6fc79f2b8a440bf0a7a6622b107dddb70ce5b0f6e457
+methods:
+- id: textbridge
+  track: pointcloud
+  problems:
+  - alignment
+  - reliability
+  title: 用文本桥统一异构教师特征
+  question: 不同二维教师的嵌入空间如何统一？
+  operation: LSeg 路径保留语言对齐特征；SEEM 生成掩码及名词标签，TAP 生成区域描述；将描述中的对象名词替换为 SEEM 标签，再用共享 CLIP 文本编码器编码并赋回掩码像素，统一嵌入空间。
+  input: LSeg 特征、SEEM 掩码与 TAP 描述
+  output: 统一语言空间的二维特征
+  stage: 教师目标构建
+  supervision: 预训练 LSeg、SEEM、TAP、CLIP
+  origin: proposed
+  origin_note: 本文提出 Model Alignment via Text；组件模型本身沿用已有实现。
+  origin_refs: []
+  evidence:
+  - url: https://arxiv.org/pdf/2503.08512v1
+    locator: §3.1，Figure 3
+  figure: fig3
+  figure_guide: 独立模块图：重点看下方掩码→描述→共享文本编码器→像素赋值路径。
+  depicted: true
+  route:
+  - 异构二维教师
+  - 文本桥接对齐
+  - 二维密集特征
+  - 二维到三维传递
+- id: projection
+  track: pointcloud
+  problems:
+  - projection
+  - multiview
+  title: 沿用 OpenScene 的像素点映射与多视角融合
+  question: 异构教师对齐后怎样从多视图传到相同的三维点？
+  operation: 文本桥接先得到两种二维密集特征；依照 OpenScene 计算像素—点对应与多视角融合，分别生成 LSeg 和 SEEM 两路逐点特征，再进入本文的能力加权融合。
+  input: 语言空间对齐的二维特征、点云、RGB-D 相机信息
+  output: 相同三维点上的两路教师特征
+  stage: 教师目标构建
+  supervision: 预训练二维教师；标定与深度信息
+  origin: reused
+  origin_note: SAS §3.1 明确说明 follow OpenScene，属于沿用步骤，不是本文核心创新。
+  origin_refs:
+  - url: https://arxiv.org/abs/2211.15654
+    locator: OpenScene §3.1；SAS 引用 [53]
+  evidence:
+  - url: https://arxiv.org/pdf/2503.08512v1#page=4
+    locator: §3.1 末段，Figure 2
+  figure: fig2
+  figure_guide: 主图上方从二维特征到 Point Features；相机对应与遮挡计算未单独展开，具体映射来源为 OpenScene。
+  depicted: true
+  route:
+  - 二维密集特征
+  - 可见性与跨视角融合
+  - 逐点特征
+  - 二维到三维传递
+- id: capability
+  track: pointcloud
+  problems:
+  - reliability
+  - multiview
+  title: 合成图估计类别能力，再按能力融合
+  question: 没有人工类别验证集时怎样选择教师？
+  operation: 用 Stable Diffusion 生成类别图像，借生成注意力与 SAM 构造伪掩码，以 mIoU 估计每个教师的类别能力；将两路特征映射并多视角融合到点后，分别得到两种类别预测。对每个教师，平均它在这两个候选类别上的能力，再以温度
+    softmax 得到融合权重。
+  input: 合成类别图与伪掩码、已投影融合的两路逐点教师特征
+  output: 类别能力表、加权融合逐点二维目标
+  stage: 能力估计与训练目标构造
+  supervision: 生成模型和预训练 SAM；伪标签不等于没有先验监督
+  origin: proposed
+  origin_note: 本文的 Annotation-free Model Capability Construction 及 capability-guided fusion。
+  origin_refs: []
+  evidence:
+  - url: https://arxiv.org/pdf/2503.08512v1
+    locator: §3.2–3.3，Figure 4
+  figure: fig4
+  figure_guide: 独立能力图从合成图、伪掩码、教师预测看向最右能力估计；融合操作本身在 §3.3 与总图。
+  depicted: true
+  route:
+  - 异构二维教师
+  - 可靠性加权与选择
+  - 逐点特征
+  - 二维到三维传递
+- id: superpoint
+  track: pointcloud
+  problems:
+  - distillation
+  - regions
+  title: 超点聚合与双尺度特征蒸馏
+  question: 如何利用区域几何减轻逐点噪声？
+  operation: 在非重叠超点内分别平均三维网络特征和融合后的二维目标；把二维超点均值赋回各成员点，同时计算逐点与超点级的 1−cos 损失，抑制超点内部语义波动。
+  input: 融合二维目标、三维点及超点划分
+  output: 点级与超点级语言对齐三维特征
+  stage: 训练
+  supervision: 二维教师目标和几何超点；无需人工三维语义标签
+  origin: modified
+  origin_note: 超点蒸馏明确类似 GGSD；本文将其用于多教师融合目标，并在后续增加独立的时序集成自蒸馏。
+  origin_refs:
+  - url: https://arxiv.org/abs/2407.13362
+    locator: SAS §3.4 引用 [76] GGSD（ECCV 2024）：Open Vocabulary 3D Scene Understanding via Geometry Guided Self-Distillation
+  evidence:
+  - url: https://arxiv.org/pdf/2503.08512v1
+    locator: §3.3–3.4，Figure 2
+  figure: fig2
+  figure_guide: 总图右侧 Superpoint 与 Distillation 连接；超点内部平均操作需结合公式阅读。
+  depicted: true
+  route:
+  - 二维密集特征
+  - 超点聚合与蒸馏
+  - 逐点特征
+  - 特征蒸馏
+module_checked_on: '2026-11-09'
 ---
 # SAS
 

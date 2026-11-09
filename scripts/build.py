@@ -14,6 +14,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 import yaml
+from methods import generate_methods, note_modules, validate_methods
 
 ROOT = Path(__file__).resolve().parents[1]
 STAGE = ROOT / '.codex_tmp/docs'
@@ -65,7 +66,11 @@ def readme_catalogue(papers):
             note = f'[{note_label}](docs/papers/{p["_file"]})'
             chunks.append('| ' + ' | '.join([title, venue, cell(p['summary']), code, note]) + ' |')
         chunks.append('')
-    chunks += ['## 数据集与方法比较\n',
+    chunks += ['## 两条阅读主线\n',
+               '- [开放词汇能力如何实现](https://buzhidaozenmo.github.io/Open-Vocabulary-Segmentation-Atlas/?track=vocabulary)：文本编码、视觉语言对齐、区域预测、视频和语言场。',
+               '- [点云语义如何构建与优化](https://buzhidaozenmo.github.io/Open-Vocabulary-Segmentation-Atlas/?track=pointcloud)：投影、多视角融合、教师可靠性、蒸馏与几何区域处理。',
+               '\n点击路线节点或连线筛选方法，展开查看具体操作、原图和证据。模块在上方各篇论文笔记的元数据维护。\n',
+               '## 数据集与方法比较\n',
                '- [数据集与评测设置](docs/benchmarks.md)',
                '- [五篇样例的方法比较](docs/insights.md)',
                '- [研究地图与技术矩阵](https://buzhidaozenmo.github.io/Open-Vocabulary-Segmentation-Atlas/atlas/)',
@@ -140,6 +145,7 @@ def validate(papers, taxonomy, relations):
                     raise ValueError(f'{label}: missing {heading}')
             if len(p['sources']) < 3:
                 raise ValueError(f'{label}: detailed sample needs multiple evidence locators')
+    validate_methods(papers, ROOT)
     for edge in relations:
         if edge['source'] not in ids or edge['target'] not in ids:
             raise ValueError('Broken relation reference')
@@ -183,7 +189,7 @@ def generate(papers, taxonomy, relations):
         )
         body = p['_body']
         head, _, rest = body.partition('\n')
-        write('papers/' + p['_file'], head + '\n\n' + meta + rest)
+        write('papers/' + p['_file'], head + '\n\n' + meta + note_modules(p) + rest)
         r = {k: v for k, v in p.items() if not k.startswith('_')}
         r['url'] = 'papers/' + p['paper_id'] + '/'
         r['direction_label'] = GROUPS[p['primary_direction']]
@@ -192,70 +198,8 @@ def generate(papers, taxonomy, relations):
         r['code_label'] = code_names[p['code_status']]
         records.append(r)
     write('assets/papers.json', json.dumps(records, ensure_ascii=False, indent=2))
-    n = len(papers)
-    detail = sum(p['content_status'] == 'detailed_sample' for p in papers)
-    public = sum(p['code_status'] == 'public' for p in papers)
     counts = Counter(p['primary_direction'] for p in papers)
-    write('index.md', f'''
----
-hide:
-  - toc
----
-<div class="atlas-hero" markdown>
-<div class="eyebrow">RESEARCH ATLAS · 开放词汇分割</div>
-
-# 从一篇论文，走向一张研究地图。
-
-以 **3D 点云**为重点，连接二维、视频与多视角研究。追问每项工作解决什么问题、怎样实现，以及证据支持到哪里。
-
-[进入论文库 →](library.md){{ .md-button .md-button--primary }}
-[阅读研究地图](atlas.md){{ .md-button }}
-
-</div>
-<div class="stat-grid">
-<div><strong>{n}</strong><span>首批论文 / 目标约 100</span></div>
-<div><strong>{detail}</strong><span>带证据定位的样例笔记</span></div>
-<div><strong>{public}</strong><span>查到官方公开实现</span></div>
-<div><strong>{len(counts)}</strong><span>已覆盖研究方向</span></div>
-</div>
-
-## 先看懂问题，再比较方法
-
-<div class="grid cards" markdown>
-
-- **01 / 语义如何进入三维？**
-
-    从多视角特征蒸馏，到点云与语言直接关联。
-
-    [OpenScene](papers/openscene.md) · [PLA](papers/pla.md) · [RegionPLC](papers/regionplc.md)
-
-- **02 / 教师预测不可靠怎么办？**
-
-    比较多教师能力融合、几何净化与层级一致性。
-
-    [SAS](papers/sas.md) · [GeoPurify](papers/geopurify.md) · [GeoGuide](papers/geoguide.md)
-
-- **03 / 新一代二维模型如何做密集分割？**
-
-    从 CLIP 相关性修正，到 SAM3 概念分割与单次前向适配。
-
-    [CorrCLIPv2](papers/corrclipv2.md) · [SAM3](papers/sam3.md) · [EOVSAM](papers/eovsam.md)
-
-- **04 / 连续观测如何形成稳定表示？**
-
-    查看跨帧关联、多视图聚合和语言高斯表示。
-
-    [方向与时间线](atlas.md) · [技术矩阵](matrix.md)
-
-</div>
-
-## 当前边界
-
-这是首版试点：{detail} 篇为样例笔记，其余 {n-detail} 篇仅建索引。尚未独立复现实验；开源状态依据仓库与官方文档核查。
-GeoGuide 的官方代码尚未确认；EOVSAM 单独标记为预印本。评测协议不同的结果不进入同一排行榜。
-
-<small>最近核查：2026-11-09 · 中文笔记 / 英文原始资料 · [了解整理规范](about.md)</small>
-''')
+    generate_methods(papers, GROUPS, write)
     filters = [('primary_direction', '方向'), ('year', '年份'), ('venue', '会议 / 期刊'),
                ('task_types', '任务'), ('techniques', '技术'), ('datasets', '数据集'),
                ('code_status', '开源状态'), ('publication_status', '发表状态'),

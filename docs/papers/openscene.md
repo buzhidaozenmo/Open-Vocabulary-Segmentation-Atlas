@@ -43,6 +43,99 @@ sources:
   locator: v2 §3 / Table 4
 - url: https://github.com/pengsongyou/openscene
   locator: 官方 README / 公开目录；未运行
+figures:
+- id: fig3
+  asset: assets/figures/openscene-fig3.png
+  label: Figure 3
+  page: 3
+  version: arXiv 2211.15654v2
+  source_url: https://arxiv.org/pdf/2211.15654v2
+  clip_pdf_points:
+  - 305
+  - 45
+  - 549
+  - 234
+  source_sha256: 31a4c88491fa9b38180e251b64422107c7d3028ef21b1c9e01581501b7868f0e
+methods:
+- id: projection
+  track: pointcloud
+  problems:
+  - projection
+  - multiview
+  title: 投影、可见性筛选与跨视角平均
+  question: 同一个三维点从哪些像素接收语义？
+  operation: 用相机内外参将点投到各视图，借深度检查遮挡；收集可见像素的二维语言对齐特征，对同一点的多视角特征取均值。
+  input: 点云、带位姿 RGB-D、二维密集特征
+  output: 逐点多视角融合特征
+  stage: 训练目标生成／带图像推理
+  supervision: 预训练二维教师；需要深度与相机标定
+  origin: unverified
+  origin_note: 本文基础投影与融合步骤；本轮未核查这些通用操作的历史首创来源。
+  origin_refs: []
+  evidence:
+  - url: https://arxiv.org/pdf/2211.15654v2
+    locator: §3.1，Figure 3
+  figure: fig3
+  figure_guide: 看左上多视图到中间 Multi-view Feature Fusion，再到逐点二维特征；主图没有展开深度可见性公式。
+  depicted: true
+  route:
+  - 二维密集特征
+  - 可见性与跨视角融合
+  - 逐点特征
+  - 二维到三维传递
+- id: distill
+  track: pointcloud
+  problems:
+  - distillation
+  title: 用余弦损失蒸馏到点云网络
+  question: 怎样让点云网络保留二维教师的语言空间？
+  operation: 用多视角融合特征作为目标，最小化逐点 1−cos 相似度；推理时将三维特征与任意文本类别嵌入比较。
+  input: 融合二维特征、点云
+  output: 语言对齐三维特征
+  stage: 训练；文本分类用于推理
+  supervision: 无需三维语义标签；依赖预训练二维教师
+  origin: modified
+  origin_note: 沿用预训练二维语言空间，在三维网络上实施特征蒸馏。
+  origin_refs:
+  - url: https://vladlen.info/papers/LSeg.pdf
+    locator: 原文 §3.1 引用的二维教师 LSeg
+  evidence:
+  - url: https://arxiv.org/pdf/2211.15654v2
+    locator: §3.2–3.3，Figure 3
+  figure: fig3
+  figure_guide: 看 E3D 到 L 的蒸馏连接；右侧余弦相似度连接文本查询。
+  depicted: true
+  route:
+  - 二维密集特征
+  - 特征蒸馏
+  - 逐点特征
+  - 文本相似度分类
+- id: ensemble
+  track: pointcloud
+  problems:
+  - reliability
+  title: 按文本匹配置信度选择二维或三维特征
+  question: 二维细节和三维上下文冲突时如何取舍？
+  operation: 分别计算二维融合特征、三维网络特征对候选文本的余弦相似度，以各自最高相似度比较置信度，逐点选择较可信的一路，而非把两路直接平均。
+  input: 二维融合与三维网络特征、候选文本
+  output: 二维／三维集成预测
+  stage: 推理
+  supervision: 预训练文本编码器；无需新增标签
+  origin: proposed
+  origin_note: 本文的二维三维集成规则；不据此宣称置信度选择思想的历史首创。
+  origin_refs: []
+  evidence:
+  - url: https://arxiv.org/pdf/2211.15654v2
+    locator: §3.3，Figure 3
+  figure: fig3
+  figure_guide: 看 f2D、f3D 汇合为 f2D3D 的路径；选择规则需要结合 §3.3 阅读。
+  depicted: true
+  route:
+  - 二维与三维语义
+  - 可靠性加权与选择
+  - 逐点特征
+  - 文本相似度分类
+module_checked_on: '2026-11-09'
 ---
 # OpenScene
 

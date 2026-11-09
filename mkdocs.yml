@@ -16,15 +16,6 @@ theme:
     - scheme: default
       primary: custom
       accent: teal
-      toggle:
-        icon: material/weather-night
-        name: 切换深色
-    - scheme: slate
-      primary: custom
-      accent: teal
-      toggle:
-        icon: material/weather-sunny
-        name: 切换浅色
   features:
     - navigation.tabs
     - navigation.sections
@@ -54,8 +45,9 @@ extra_css:
   - assets/atlas.css
 extra_javascript:
   - assets/atlas.js
+  - assets/methods.js
 nav:
-  - 首页: index.md
+  - 方法路线: index.md
   - 论文库: library.md
   - 研究地图:
       - 方向与时间线: atlas.md
