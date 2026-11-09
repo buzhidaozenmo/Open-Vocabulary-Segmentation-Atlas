@@ -1,0 +1,73 @@
+site_name: Open-Vocabulary Segmentation Atlas
+site_description: 以证据为基础的开放词汇分割研究地图
+site_url: https://buzhidaozenmo.github.io/Open-Vocabulary-Segmentation-Atlas/
+repo_url: https://github.com/buzhidaozenmo/Open-Vocabulary-Segmentation-Atlas
+repo_name: GitHub · Research Atlas
+docs_dir: .codex_tmp/docs
+site_dir: .codex_tmp/site
+use_directory_urls: true
+theme:
+  name: material
+  language: zh
+  font: false
+  icon:
+    logo: material/graph-outline
+  palette:
+    - scheme: default
+      primary: custom
+      accent: teal
+      toggle:
+        icon: material/weather-night
+        name: 切换深色
+    - scheme: slate
+      primary: custom
+      accent: teal
+      toggle:
+        icon: material/weather-sunny
+        name: 切换浅色
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+plugins:
+  - search:
+      lang: [zh, en]
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.arithmatex:
+      generic: true
+extra_css:
+  - assets/atlas.css
+extra_javascript:
+  - assets/atlas.js
+nav:
+  - 首页: index.md
+  - 论文库: library.md
+  - 研究地图:
+      - 方向与时间线: atlas.md
+      - 技术矩阵: matrix.md
+      - 横向比较: insights.md
+  - 数据与评测: benchmarks.md
+  - 维护说明: about.md
+  - 论文笔记:
+      - OpenScene: papers/openscene.md
+      - SAS: papers/sas.md
+      - GeoPurify: papers/geopurify.md
+      - CorrCLIPv2: papers/corrclipv2.md
+      - EOVSAM: papers/eovsam.md
+      - 其他首批论文: remaining.md
+copyright: 独立研究笔记 · 论文与代码版权归原作者 · 不承诺实验复现

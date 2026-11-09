@@ -1,0 +1,12 @@
+- source: openscene
+  target: sas
+  type: explicit_basis
+  label: 明确沿用投影与蒸馏基础
+  evidence_url: https://arxiv.org/html/2503.08512v1#S3.SS1
+  locator: SAS §3.1、§3.4
+- source: sam3
+  target: eovsam
+  type: explicit_adaptation
+  label: 显式架构适配
+  evidence_url: https://arxiv.org/html/2608.02284v1#Sx3
+  locator: EOVSAM Approach / Fig.2
