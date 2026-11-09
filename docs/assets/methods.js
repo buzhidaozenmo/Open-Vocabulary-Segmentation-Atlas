@@ -6,7 +6,7 @@
   // Source figures remain ordinary links when scripts are unavailable.
   const dialog = document.createElement('dialog');
   dialog.className = 'figure-dialog';
-  dialog.innerHTML = '<button type="button" aria-label="关闭原图">关闭 ×</button><img alt=""><p></p>';
+  dialog.innerHTML = '<button type="button" aria-label="关闭原图">关闭 ×</button><img alt=""><p></p><a class="original-image" target="_blank" rel="noopener">打开原尺寸 ↗</a>';
   document.body.append(dialog);
   function revealHash() {
     let target;try{target=document.getElementById(decodeURIComponent(location.hash.slice(1)));}catch{}
@@ -19,6 +19,7 @@
     e.preventDefault(); dialog.querySelector('img').src = a.href;
     dialog.querySelector('img').alt = a.querySelector('img').alt;
     dialog.querySelector('p').textContent = a.closest('figure').querySelector('figcaption').textContent;
+    dialog.querySelector('.original-image').href = a.href;
     dialog.showModal();
   }));
   if (!root) return;

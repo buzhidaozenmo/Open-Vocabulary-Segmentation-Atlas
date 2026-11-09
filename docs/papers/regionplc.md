@@ -102,6 +102,23 @@ methods:
   - 逐点特征
   - 对比学习
 module_checked_on: '2026-11-09'
+results:
+- id: table2
+  label: Table 2
+  asset: assets/results/regionplc-table2.png
+  title: 基类标注设置下的三维开放世界语义分割
+  setting: ScanNet、nuScenes、ScanNet200 的 B／N 类别划分；此表是 base-annotated 设置，不是 annotation-free 结果。
+  metrics: 每格 hIoU／mIoUB／mIoUN，均为 ↑
+  reading: 与 PLA 等方法按相同划分比较；保留三个数值的顺序，不能只抽其中一个当总分。
+  page: 6
+  version: arXiv 2304.00962v4
+  source_url: https://arxiv.org/pdf/2304.00962v4
+  source_sha256: 7db6afcc07c80355cd737eed900814ae5fa739e6c8da733d8963cebdaa0095ab
+  clip_pdf_points:
+  - 47
+  - 58
+  - 548
+  - 172
 ---
 # RegionPLC
 

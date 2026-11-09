@@ -99,6 +99,39 @@ methods:
   - 实例特征
   - 文本相似度分类
 module_checked_on: '2026-11-09'
+results:
+- id: table1
+  label: Table 1
+  asset: assets/results/eovsam-table1.png
+  title: 开放词汇语义分割主结果
+  setting: ADE20K 150／847、PASCAL Context 59／459、PASCAL VOC 20；原表按训练数据分组，† 为作者复测。
+  metrics: mIoU ↑
+  reading: 看 EOVSAM 最后一行；同时保留 SAM3 的 SA-Co 训练与 EOVSAM 的 COCO Panoptic 训练条件。
+  page: 5
+  version: arXiv 2608.02284v1
+  source_url: https://arxiv.org/pdf/2608.02284v1
+  source_sha256: e64284eb685abdf944e639233235d3090fae775a38d4e92e1763ace1385081c6
+  clip_pdf_points:
+  - 51
+  - 50
+  - 561
+  - 295
+- id: table3
+  label: Table 3
+  asset: assets/results/eovsam-table3.png
+  title: 精度与推理速度
+  setting: 单张 RTX 3090、CUDA 12.4；相同类别列表、预计算文本特征；各模型使用官方分辨率，EOVSAM 括号为输入尺度。
+  metrics: mIoU ↑；PQ ↑；FPS ↑
+  reading: 在同一数据集的列内同时看精度和 FPS；EOVSAM 多行使用同一检查点，但输入尺度不同。
+  page: 6
+  version: arXiv 2608.02284v1
+  source_url: https://arxiv.org/pdf/2608.02284v1
+  source_sha256: e64284eb685abdf944e639233235d3090fae775a38d4e92e1763ace1385081c6
+  clip_pdf_points:
+  - 51
+  - 338
+  - 561
+  - 500
 ---
 # EOVSAM
 

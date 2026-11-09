@@ -75,6 +75,39 @@ methods:
   - 视频实例类别
   - 外部模型分类
 module_checked_on: '2026-11-09'
+results:
+- id: table2
+  label: Table 2
+  asset: assets/results/entitysam-table2.png
+  title: 视频实体与全景分割主结果
+  setting: COCO → VIPSeg／VIPEntitySeg；EntitySAM 不使用类别标注训练实体模型；原表区分类别无关训练与不同骨干。
+  metrics: 实体：VEQ、STQ；全景：VPQ；均为 ↑
+  reading: 左侧看实体分割，右侧看带类别的全景结果；类别命名使用外部 VLM，不等于实体模型本身具备文本分类器。
+  page: 7
+  version: CVPR 2025 出版方 PDF
+  source_url: https://openaccess.thecvf.com/content/CVPR2025/papers/Ye_EntitySAM_Segment_Everything_in_Video_CVPR_2025_paper.pdf
+  source_sha256: 717622aa16da9fc5f6feb65ac93f350c643ed43a3dec9ef926cd29cf0c7efa7b
+  clip_pdf_points:
+  - 55
+  - 54
+  - 557
+  - 276
+- id: table3
+  label: Table 3
+  asset: assets/results/entitysam-table3.png
+  title: 开放词汇视频语义分割
+  setting: COCO → VSPW；按 ResNet-50／ConvNeXt-L 等骨干分组，与各组 EntitySAM 比较。
+  metrics: mIoU ↑；mVC8／mVC16 ↑
+  reading: mIoU 看逐像素语义准确率；mVC8／16 看不同时间窗口的一致性。
+  page: 7
+  version: CVPR 2025 出版方 PDF
+  source_url: https://openaccess.thecvf.com/content/CVPR2025/papers/Ye_EntitySAM_Segment_Everything_in_Video_CVPR_2025_paper.pdf
+  source_sha256: 717622aa16da9fc5f6feb65ac93f350c643ed43a3dec9ef926cd29cf0c7efa7b
+  clip_pdf_points:
+  - 55
+  - 278
+  - 298
+  - 409
 ---
 # EntitySAM
 

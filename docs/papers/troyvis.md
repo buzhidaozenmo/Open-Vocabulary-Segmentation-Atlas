@@ -113,6 +113,39 @@ methods:
   - 视频实体记忆
   - 跨帧语义保持
 module_checked_on: '2026-11-09'
+results:
+- id: table2
+  label: Table 2
+  asset: assets/results/troyvis-table2.png
+  title: 开放词汇视频实例分割主结果
+  setting: BURST 的 ALL／Common／Uncommon 与 LV-VIS 的整体／基类／新类评估；原表同时列 FPS。
+  metrics: HOTA／track mAP ↑；AP／APb／APn ↑；FPS ↑
+  reading: 看 TROY-VIS 在 LV-VIS 的 APn 与 FPS，以及 BURST 的 Uncommon 列；时序关联质量与分割精度分别看。
+  page: 8
+  version: arXiv 2412.04434v1
+  source_url: https://arxiv.org/pdf/2412.04434v1
+  source_sha256: 9c5f669968a27ea21c7b4753fe11d39b15c7e5ffd25dce9bcf89e21dc044e3d4
+  clip_pdf_points:
+  - 47
+  - 69
+  - 548
+  - 263
+- id: table1
+  label: Table 1
+  asset: assets/results/troyvis-table1.png
+  title: 文本缓存与各组件延迟
+  setting: A100、480p 输入、LV-VIS；比较 GLEE-Lite、增加 FEM 的版本及 TROY-VIS。
+  metrics: 总延迟与各组件延迟 ms ↓
+  reading: 看 Text Encoder 行的缓存收益及 Total 行；该表硬件不同于其他论文的速度表，不作跨论文 FPS 排名。
+  page: 7
+  version: arXiv 2412.04434v1
+  source_url: https://arxiv.org/pdf/2412.04434v1
+  source_sha256: 9c5f669968a27ea21c7b4753fe11d39b15c7e5ffd25dce9bcf89e21dc044e3d4
+  clip_pdf_points:
+  - 306
+  - 155
+  - 548
+  - 290
 ---
 # TROY-VIS
 

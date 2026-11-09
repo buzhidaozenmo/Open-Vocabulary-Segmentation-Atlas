@@ -106,6 +106,7 @@ python3 -m venv .codex_tmp/venv
 | --- | --- |
 | `docs/papers/` | 每篇论文的唯一数据源：YAML 元数据 + Markdown 笔记 |
 | `docs/assets/figures/` | 带来源与版本记录的论文原图提取 |
+| `docs/assets/results/` | 保留基线、表头与脚注的主要实验结果原表 |
 | `data/` | 受控技术词表、数据集与论文关系 |
 | `templates/` | 论文、方法和评测记录模板 |
 | `scripts/` | 校验与页面生成 |
@@ -122,6 +123,8 @@ python3 -m venv .codex_tmp/venv
 README 的分类清单和网站使用同一份论文元数据。更新脚本只替换清单区，保留其他说明；构建会检查二者是否同步。
 
 每篇论文的 `methods` 记录问题、具体操作、输入输出、使用阶段、监督、方法来源和证据；`figures` 记录图号、页码、原文版本、链接、裁切坐标与源文件 SHA256。网站自动生成路线、比较表和论文页模块说明。方法来源不明时标记未核实；不要求模块属于论文核心创新。
+
+`results` 保存主要实验结果原表及实验设置、指标方向和看表重点，展开“图解与结果”即可查看并放大。混合任务的模块使用 `result_tables` 选择对应结果表；不同监督设置和速度硬件条件保留在图旁说明。
 
 GitHub Pages 使用 Actions 部署；仓库 About 的 Website 与本 README 指向相同地址。构建失败时保留上一次成功部署。
 

@@ -114,6 +114,23 @@ methods:
   - 逐点类别分数
   - 文本相似度分类
 module_checked_on: '2026-11-09'
+results:
+- id: table2
+  label: Table 2
+  asset: assets/results/pla-table2.png
+  title: 基类／新类开放词汇三维语义分割
+  setting: ScanNet 与 S3DIS，不同 B／N 类别划分；CN prior 表示训练时是否知道新类别名称。
+  metrics: hIoU ↑；mIoUB ↑；mIoUN ↑
+  reading: 同时看新类 mIoUN 与基类／新类调和均值 hIoU，并检查 CN prior；PLA (w/o Cap.) 是移除描述监督的对照。
+  page: 6
+  version: arXiv 2211.16312v2
+  source_url: https://arxiv.org/pdf/2211.16312v2
+  source_sha256: 28526dcffbbef224c56bdc90c3e8131ed2603ef51053c61789581fd6ba31c457
+  clip_pdf_points:
+  - 47
+  - 67
+  - 548
+  - 211
 ---
 # PLA
 

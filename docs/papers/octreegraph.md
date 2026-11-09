@@ -115,6 +115,39 @@ methods:
   - 实例特征
   - 文本相似度分类
 module_checked_on: '2026-11-09'
+results:
+- id: table1
+  label: Table 1
+  asset: assets/results/octreegraph-table1.png
+  title: 多视角建图后的三维语义分割
+  setting: Replica 与 ScanNet；原表分别列 OVSeg 与 ViT-H-14 作为 CLIP Backbone。
+  metrics: mIoU ↑；F-mIoU ↑；mAcc ↑
+  reading: 优先比较相同骨干的 Ours 与基线；保留原表的小数尺度，不另行换算为百分数。
+  page: 6
+  version: arXiv 2411.16253v2
+  source_url: https://arxiv.org/pdf/2411.16253v2
+  source_sha256: c38b5fc602bacf464d0606523e2ac025fee57424d5fdc5b12488df8e938b81d5
+  clip_pdf_points:
+  - 90
+  - 72
+  - 524
+  - 247
+- id: table2
+  label: Table 2
+  asset: assets/results/octreegraph-table2.png
+  title: 三维实例分割主结果
+  setting: ScanNet200；原表按监督掩码／zero-shot 掩码及监督语义／zero-shot 语义划分组别。
+  metrics: AP ↑；AP50 ↑；AP25 ↑
+  reading: 主要看 z.s. mask + z.s. semantic 组内 Ours 与相同设置方法；前两组使用监督掩码，条件不同。
+  page: 6
+  version: arXiv 2411.16253v2
+  source_url: https://arxiv.org/pdf/2411.16253v2
+  source_sha256: c38b5fc602bacf464d0606523e2ac025fee57424d5fdc5b12488df8e938b81d5
+  clip_pdf_points:
+  - 55
+  - 261
+  - 298
+  - 486
 ---
 # OV-Octree-Graph
 

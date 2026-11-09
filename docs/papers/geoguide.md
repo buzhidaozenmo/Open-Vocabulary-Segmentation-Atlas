@@ -114,6 +114,23 @@ methods:
   - 实例特征
   - 几何一致性约束
 module_checked_on: '2026-11-09'
+results:
+- id: table1
+  label: Table 1
+  asset: assets/results/geoguide-table1.png
+  title: 开放词汇三维语义分割主结果
+  setting: ScanNet v2、nuScenes、Matterport3D；区分全监督／zero-shot，LS／OS 二维教师及 ‡ 二维三维集成设置。
+  metrics: mIoU ↑；mAcc ↑
+  reading: 看各教师设置下 GeoGuide 与对应基线；SAS* 表示使用与 SAS 相同的二维特征。
+  page: 6
+  version: arXiv 2603.26260v1
+  source_url: https://arxiv.org/pdf/2603.26260v1
+  source_sha256: f88d3230fcf875771ed99b06862b5abd82a0a56795780aae434a3b62c5bfcb12
+  clip_pdf_points:
+  - 314
+  - 68
+  - 557
+  - 467
 ---
 # GeoGuide
 

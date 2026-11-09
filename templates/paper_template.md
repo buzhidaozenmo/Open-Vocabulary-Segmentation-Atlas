@@ -52,6 +52,20 @@ methods:
     depicted: true  # 没有画出该操作时 false，图解中如实说明
     figure_guide: 看哪个区域、连接路径；若操作未画出，明确指出
     route: [语义来源, 相关操作, 输出表示, 预测或用途]  # 替换为具体规范化标签
+    result_tables: [table1]  # 可省略；省略时展示本论文全部主结果表
+results:
+  - id: table1
+    label: Table 1
+    asset: assets/results/REPLACE-table1.png
+    title: 待填写主结果表的任务
+    setting: 数据集、划分、监督、骨干或速度硬件条件；按原文填写
+    metrics: 指标及方向，例如 mIoU ↑；延迟 ms ↓
+    reading: 该看哪一行与哪些同设置基线，不编造总排名
+    page: 5
+    version: 待填写精确 PDF 版本
+    source_url: https://arxiv.org/pdf/REPLACEv1
+    clip_pdf_points: [0, 0, 100, 100]
+    source_sha256: 待填写下载 PDF 的 SHA256
 sources:
   - url: https://arxiv.org/abs/REPLACE
     locator: 待填写原文版本、章节或图表

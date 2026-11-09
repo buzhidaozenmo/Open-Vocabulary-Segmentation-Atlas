@@ -136,6 +136,23 @@ methods:
   - 逐点特征
   - 文本相似度分类
 module_checked_on: '2026-11-09'
+results:
+- id: table2
+  label: Table 2
+  asset: assets/results/openscene-table2.png
+  title: 室内与室外三维语义分割主结果
+  setting: nuScenes、ScanNet、Matterport；原表同时保留全监督参照与 zero-shot 方法。
+  metrics: mIoU ↑；mAcc ↑
+  reading: 主要比较 zero-shot 组的 Ours 与 MSeg Voting。原表说明部分全监督方法仍高于 OpenScene，不能只看部分基线得出全面领先。
+  page: 5
+  version: arXiv 2211.15654v2
+  source_url: https://arxiv.org/pdf/2211.15654v2
+  source_sha256: 31a4c88491fa9b38180e251b64422107c7d3028ef21b1c9e01581501b7868f0e
+  clip_pdf_points:
+  - 305
+  - 211
+  - 548
+  - 476
 ---
 # OpenScene
 

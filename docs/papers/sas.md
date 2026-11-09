@@ -195,6 +195,23 @@ methods:
   - 逐点特征
   - 特征蒸馏
 module_checked_on: '2026-11-09'
+results:
+- id: table1
+  label: Table 1
+  asset: assets/results/sas-table1.png
+  title: 零样本三维语义分割主结果
+  setting: nuScenes、ScanNet v2、Matterport3D；原表区分全监督与 zero-shot 两组，Ours 为完整 SAS 的结果。
+  metrics: mIoU ↑
+  reading: 看 zero-shot 组内 Ours 与 OpenScene、GGSD 等基线；本表没有把二维融合、蒸馏与自蒸馏拆开，组件对照见原文 Table 3。
+  page: 7
+  version: arXiv 2503.08512v1
+  source_url: https://arxiv.org/pdf/2503.08512v1
+  source_sha256: 9f50e30794266863762c6fc79f2b8a440bf0a7a6622b107dddb70ce5b0f6e457
+  clip_pdf_points:
+  - 55
+  - 68
+  - 298
+  - 289
 ---
 # SAS
 

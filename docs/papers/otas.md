@@ -77,6 +77,8 @@ methods:
   - 视觉聚类与语言池化
   - 区域语义原型
   - 文本相似度分类
+  result_tables:
+  - table3
 - id: spatial
   track: pointcloud
   problems:
@@ -104,7 +106,42 @@ methods:
   - 几何条件聚类
   - 逐点特征
   - 二维到三维传递
+  result_tables:
+  - table2
 module_checked_on: '2026-11-09'
+results:
+- id: table2
+  label: Table II
+  asset: assets/results/otas-table2.png
+  title: 多视图三维植被分割
+  setting: TartanAir，已知相机位姿构建语言点云，逐点评估植被；Sec 为重建总时间，不含评估。
+  metrics: IoU／Fsc／Pre／Rec ↑；Sec ↓
+  reading: 逐场景比较 OTAS Spatial 与 OpenFusion、ConceptGraphs，并同时看分割质量和重建耗时。
+  page: 5
+  version: arXiv 2507.08851v2
+  source_url: https://arxiv.org/pdf/2507.08851v2
+  source_sha256: 66bb17e8839c87774ca91c6fc02d5e144d401e24e237848b3edf301f7d561fba
+  clip_pdf_points:
+  - 51
+  - 295
+  - 302
+  - 562
+- id: table3
+  label: Table III
+  asset: assets/results/otas-table3.png
+  title: 单视图二维室外分割
+  setting: ORFD；原表分 Fine-tuned 与 Zero-Shot 两组，† 为引用工作重实现。
+  metrics: IoU／Fsc／Pre／Rec ↑；FPS ↑
+  reading: 看 OTAS Small／Large 的质量和速度；原表保留微调方法与零样本方法的分组。
+  page: 5
+  version: arXiv 2507.08851v2
+  source_url: https://arxiv.org/pdf/2507.08851v2
+  source_sha256: 66bb17e8839c87774ca91c6fc02d5e144d401e24e237848b3edf301f7d561fba
+  clip_pdf_points:
+  - 310
+  - 293
+  - 561
+  - 506
 ---
 # OTAS
 

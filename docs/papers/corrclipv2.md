@@ -136,6 +136,23 @@ methods:
   - 区域语义原型
   - 语义增强
 module_checked_on: '2026-11-09'
+results:
+- id: table1
+  label: Table 1
+  asset: assets/results/corrclipv2-table1.png
+  title: 十个标准二维开放词汇分割基准
+  setting: 十个基准各自报告 mIoU；保留全监督、弱监督及免训练方法的分组。
+  metrics: mIoU ↑；Mean ↑
+  reading: 看最下方 CorrCLIPv2 与同组 VFM-based 免训练方法；不同训练组的结果不要当作相同监督条件。
+  page: 13
+  version: arXiv 2610.24757v1
+  source_url: https://arxiv.org/pdf/2610.24757v1
+  source_sha256: 66138d73fa96404748dd529cf7c8ab929e937871419c2ed391e10a5171bea59d
+  clip_pdf_points:
+  - 64
+  - 68
+  - 524
+  - 472
 ---
 # CorrCLIPv2
 

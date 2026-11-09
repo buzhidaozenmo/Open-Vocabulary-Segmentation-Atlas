@@ -20,10 +20,13 @@ E = lambda v: html.escape(str(v), quote=True)
 def validate_methods(papers, root):
     for p in papers:
         figures = {f['id']: f for f in p.get('figures', [])}
+        results = {r['id']: r for r in p.get('results', [])}
+        if not results or len(results) != len(p['results']):
+            raise ValueError(f'{p["paper_id"]}: missing or duplicate main-result tables')
         if not p.get('methods'):
             raise ValueError(f'{p["paper_id"]}: missing research modules')
         seen = set()
-        for f in figures.values():
+        for f in [*figures.values(), *results.values()]:
             for key in ('asset', 'label', 'page', 'version', 'source_url', 'source_sha256', 'clip_pdf_points'):
                 if not f.get(key):
                     raise ValueError(f'{p["paper_id"]}: figure needs {key}')
@@ -31,6 +34,10 @@ def validate_methods(papers, root):
                 raise ValueError('Figure needs a real SHA256')
             if not (root / 'docs' / f['asset']).is_file():
                 raise ValueError('Missing source figure ' + f['asset'])
+        for result in results.values():
+            for key in ('title', 'setting', 'metrics', 'reading'):
+                if not result.get(key):
+                    raise ValueError(f'{p["paper_id"]}: result table needs {key}')
         for m in p['methods']:
             for key in ('id', 'track', 'problems', 'title', 'question', 'operation', 'input', 'output',
                         'stage', 'supervision', 'origin', 'origin_note', 'evidence', 'figure', 'figure_guide', 'route'):
@@ -47,6 +54,26 @@ def validate_methods(papers, root):
                 raise ValueError('Module without matching figure or evidence')
             if m['origin'] == 'reused' and not m.get('origin_refs'):
                 raise ValueError('Reused module requires original reference')
+            if 'result_tables' in m and (not m['result_tables'] or any(t not in results for t in m['result_tables'])):
+                raise ValueError('Module refers to missing result table')
+
+
+def result_gallery(p, m, prefix):
+    selected = m.get('result_tables', [r['id'] for r in p['results']])
+    tables = []
+    for r in p['results']:
+        if r['id'] not in selected:
+            continue
+        img = prefix + r['asset']
+        tables.append(f'''<figure class="method-figure result-figure" data-result-table="{E(r['id'])}">
+<h4>{E(r['label'])} · {E(r['title'])}</h4>
+<p class="result-setting"><strong>实验设置：</strong>{E(r['setting'])}<br><strong>指标：</strong>{E(r['metrics'])}</p>
+<a class="figure-zoom" href="{E(img)}" aria-label="放大 {E(p['short_name'])} {E(r['label'])} 实验结果表">
+<img src="{E(img)}" alt="{E(p['short_name'])} {E(r['label'])}：{E(r['title'])}，原文主结果表" loading="lazy"></a>
+<figcaption>{E(r['label'])} · PDF 第 {r['page']} 页 · {E(r['version'])}<br>
+<a href="{E(r['source_url'])}#page={r['page']}">原表来源</a> · 点击表格放大</figcaption>
+<p class="result-reading"><strong>看表重点：</strong>{E(r['reading'])}</p></figure>''')
+    return '<section class="experiment-results"><h3>主要实验结果</h3><p class="result-scope">原文报告的整体方法结果；当前模块的单独作用需结合原文消融实验。</p><div class="result-grid">' + ''.join(tables) + '</div></section>'
 
 
 def detail(p, m, prefix):
@@ -67,7 +94,7 @@ def detail(p, m, prefix):
 <figcaption>{E(f['label'])} · PDF 第 {f['page']} 页 · {E(f['version'])}<br>
 <a href="{E(f['source_url'])}#page={f['page']}">原图来源</a> · 点击原图放大</figcaption>
 <p><strong>{'图中阅读路径' if m.get('depicted', True) else '图示范围与未绘出操作'}</strong><br>{E(m['figure_guide'])}</p>
-</figure></div>'''
+</figure>{result_gallery(p, m, prefix)}</div>'''
 
 
 def note_modules(p):
@@ -91,7 +118,7 @@ def generate_methods(papers, groups, write):
 <td data-label="关注的问题">{E(m['question'])}<small>{' · '.join(E(PROBLEMS[x]) for x in m['problems'])}</small></td>
 <td data-label="相关模块及具体操作"><strong>{E(m['title'])}</strong><p>{E(m['operation'])}</p><span class="origin">{E(ORIGINS[m['origin']])}</span></td>
 <td data-label="输入输出与使用环节"><span>{E(m['input'])}</span><span class="io-arrow">↓</span><span>{E(m['output'])}</span><small>{E(m['stage'])}</small></td>
-<td data-label="图解"><button type="button" class="open-method" aria-expanded="false" aria-controls="detail-{p['paper_id']}-{m['id']}">方法与原图 <span aria-hidden="true">＋</span></button></td></tr>
+<td data-label="图解"><button type="button" class="open-method" aria-expanded="false" aria-controls="detail-{p['paper_id']}-{m['id']}">图解与结果 <span aria-hidden="true">＋</span></button></td></tr>
 <tr class="method-detail" id="detail-{p['paper_id']}-{m['id']}" hidden><td colspan="5">{detail(p,m,'')}</td></tr></tbody>''')
     write('assets/methods.json', json.dumps(dict(tracks=TRACKS, problems=PROBLEMS, origins=ORIGINS, axes=AXES, methods=records), ensure_ascii=False, indent=2))
     problems = ''.join(f'<option value="{k}">{E(v)}</option>' for k,v in PROBLEMS.items())
@@ -104,7 +131,7 @@ hide:
 ---
 # 开放词汇分割 · 方法路线
 
-从研究问题出发，比较论文中实际使用的操作。模块包含新设计与沿用方法；每项说明均可展开查看原图、输入输出和原文证据。
+从研究问题出发，比较论文中实际使用的操作。模块包含新设计与沿用方法；展开图解可查看方法原图、主要实验结果表、输入输出和原文证据。
 
 <div id="method-browser">
 <div class="track-tabs" aria-label="阅读主线">{tracks}</div>

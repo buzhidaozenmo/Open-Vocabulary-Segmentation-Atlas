@@ -125,6 +125,23 @@ methods:
   - 逐点特征
   - 语义净化
 module_checked_on: '2026-11-09'
+results:
+- id: table1
+  label: Table 1
+  asset: assets/results/geopurify-table1.png
+  title: 少量三维训练数据下的主结果
+  setting: ScanNetV2 与 Matterport3D；原表保留 3D Net、Training Data 列：GeoPurify 使用约 1.5% 三维训练数据。
+  metrics: mIoU ↑；mAcc ↑
+  reading: 同时看效果与训练数据量。原表区分全监督、zero-shot 和少数据 zero-shot，†／‡ 的来源说明保留在表注中。
+  page: 7
+  version: arXiv 2510.02186v2
+  source_url: https://arxiv.org/pdf/2510.02186v2
+  source_sha256: 868135fd90ca1dd03ea3b9770604d6e6c54cdd551ecf07bdd11f1a3f0880678d
+  clip_pdf_points:
+  - 105
+  - 370
+  - 507
+  - 685
 ---
 # GeoPurify
 

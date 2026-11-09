@@ -87,6 +87,23 @@ methods:
   - 实例特征
   - 文本相似度分类
 module_checked_on: '2026-11-09'
+results:
+- id: table1
+  label: Table 1
+  asset: assets/results/openmask3d-table1.png
+  title: 三维开放词汇实例分割主结果
+  setting: ScanNet200 验证集；Mask3D 为闭集全监督参照，OpenScene 基线额外使用类别无关实例掩码。
+  metrics: AP ↑；AP50 ↑；AP25 ↑；head／common／tail AP ↑
+  reading: 看开放词汇组内 OpenMask3D 与 OpenScene + masks，并查看长尾 tail AP；保留全监督参照的不同设置。
+  page: 7
+  version: arXiv 2306.13631v2
+  source_url: https://arxiv.org/pdf/2306.13631v2
+  source_sha256: dad614ec86cb8f3778e61e30f0a0142085edc27ccdd318bfdf75b201427fa42c
+  clip_pdf_points:
+  - 105
+  - 69
+  - 508
+  - 233
 ---
 # OpenMask3D
 

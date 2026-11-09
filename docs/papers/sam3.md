@@ -73,6 +73,8 @@ methods:
   - 概念条件跨模态交互
   - 实例掩码
   - 概念条件分割
+  result_tables:
+  - table1
 - id: tracking
   track: vocabulary
   problems:
@@ -100,7 +102,42 @@ methods:
   - 检测与记忆关联
   - 视频实体记忆
   - 跨帧语义保持
+  result_tables:
+  - table5
 module_checked_on: '2026-11-09'
+results:
+- id: table1
+  label: Table 1
+  asset: assets/results/sam3-table1.png
+  title: 文本概念驱动的图像分割主结果
+  setting: 实例分割、框检测和语义分割三组任务，含 LVIS、SA-Co、COCO、ADE-847、PC-59、Cityscapes；原表灰色标记使用了相应闭集训练数据的结果。
+  metrics: cgF1／pmF1、AP／APo、mIoU；按各列任务解释，均为 ↑
+  reading: 看 SAM3 在各任务的对应列；APo、†、δ、灰色结果的解释全部保留在表注。
+  page: 8
+  version: arXiv 2511.16719v2
+  source_url: https://arxiv.org/pdf/2511.16719v2
+  source_sha256: 19e8a44e7fc33bc6cf237f6b4ac3948a79b33f7ffc62d09012fcac6fc9fb016f
+  clip_pdf_points:
+  - 68
+  - 59
+  - 545
+  - 237
+- id: table5
+  label: Table 5
+  asset: assets/results/sam3-table5.png
+  title: 文本提示视频概念分割主结果
+  setting: SA-Co/VEval 测试集与 LVVIS、BURST、YTVIS21、OVIS 公共基准；候选名词短语数量在原表中注明。
+  metrics: cgF1 ↑；pHOTA ↑；mAP ↑；HOTA ↑
+  reading: 按数据集和指标分别比较 SAM3 与视频基线，† 对应原表的零样本适用说明。
+  page: 9
+  version: arXiv 2511.16719v2
+  source_url: https://arxiv.org/pdf/2511.16719v2
+  source_sha256: 19e8a44e7fc33bc6cf237f6b4ac3948a79b33f7ffc62d09012fcac6fc9fb016f
+  clip_pdf_points:
+  - 68
+  - 273
+  - 545
+  - 418
 ---
 # SAM3
 

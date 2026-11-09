@@ -104,6 +104,39 @@ methods:
   - 高斯语言场
   - 文本相似度分类
 module_checked_on: '2026-11-09'
+results:
+- id: table2
+  label: Table 2
+  asset: assets/results/langsplatv2-table2.png
+  title: 三维开放词汇定位与语义分割
+  setting: LERF 的 Ramen、Teatime、Kitchen、Figurines 场景；定位与语义分割分别报告 Overall。
+  metrics: 定位 mean accuracy (%) ↑；分割 mean IoU (%) ↑
+  reading: 分别看左右两组 Overall，不能把定位准确率与分割 IoU 当成同一指标。
+  page: 7
+  version: arXiv 2507.07136v2
+  source_url: https://arxiv.org/pdf/2507.07136v2
+  source_sha256: 82382be73a62705b63f5c708f47aca3071907c8c99ee2d72b6407f9307f6ae22
+  clip_pdf_points:
+  - 105
+  - 73
+  - 508
+  - 207
+- id: table1
+  label: Table 1
+  asset: assets/results/langsplatv2-table1.png
+  title: 语言查询各阶段耗时
+  setting: LERF，单张 A100；LangSplat* 为原方法加工程优化，表内列出渲染、解码和后处理时间。
+  metrics: 分阶段／总耗时 ms ↓；FPS ↑
+  reading: 看 Decoding 与 Total：该表报告本设置下 384.6 FPS，不能把论文标题中的 450+ 直接替代此表结果。
+  page: 4
+  version: arXiv 2507.07136v2
+  source_url: https://arxiv.org/pdf/2507.07136v2
+  source_sha256: 82382be73a62705b63f5c708f47aca3071907c8c99ee2d72b6407f9307f6ae22
+  clip_pdf_points:
+  - 105
+  - 67
+  - 508
+  - 173
 ---
 # LangSplatV2
 
