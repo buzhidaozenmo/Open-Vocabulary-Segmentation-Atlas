@@ -7,7 +7,7 @@ TRACKS = {'vocabulary': '开放词汇能力如何实现', 'pointcloud': '点云�
 PROBLEMS = {
     'alignment': '语言编码与视觉对齐', 'unseen': '未见类别与类别冲突',
     'projection': '像素—点对应与可见性', 'multiview': '多视角语义传递与融合',
-    'reliability': '教师可靠性与语义冲突', 'distillation': '二维到三维特征蒸馏',
+    'reliability': '教师可靠性与语义冲突', 'distillation': '特征蒸馏与教师传递',
     'regions': '区域／超点聚合', 'geometry': '几何一致性与语义净化',
     'temporal': '跨帧语义与记忆', 'efficiency': '语言表示与查询效率',
     'prompt': '多模态提示交互',
@@ -16,6 +16,37 @@ ORIGINS = {'proposed': '本文提出', 'reused': '沿用已有方法',
            'modified': '在已有方法上修改', 'unverified': '来源未核实'}
 AXES = ['语义来源', '相关操作', '输出表示', '预测／用途']
 E = lambda v: html.escape(str(v), quote=True)
+
+
+def overview_route(p, m):
+    """Editorial grouping for a readable overview; precise source routes remain intact."""
+    probs = set(m['problems'])
+    if m['track'] == 'pointcloud':
+        source = '多视角二维语义' if probs & {'projection', 'multiview', 'distillation'} else '点云几何与语言'
+        operations = [('distillation', '二维到三维蒸馏'), ('multiview', '多视角对应与融合'),
+                      ('projection', '像素点投影与可见性'), ('reliability', '可靠性与冲突处理'),
+                      ('geometry', '几何一致性优化'), ('regions', '超点与区域聚合'),
+                      ('alignment', '点云语言对齐')]
+        representation = '点／区域语言特征'
+        purpose = '三维实例与区域' if probs & {'regions'} or 'instance' in p['task_types'] else '三维语义与检索'
+    else:
+        text = ' '.join(m['route']) + m['operation']
+        source = ('多模态语言模型' if any(x in text for x in ['MLLM', 'LLaVA', '大语言模型'])
+                  else '二维语义与三维场' if p['primary_direction'] == '3dgs'
+                  else 'CLIP 与视觉基础模型' if any(x in text for x in ['DINO', 'SAM', '视觉基础'])
+                  else '视觉语言预训练特征')
+        operations = [('prompt', '语言与空间提示'), ('unseen', '类别选择与消歧'),
+                      ('temporal', '跨帧传播与关联'), ('efficiency', '语义压缩与高效查询'),
+                      ('distillation', '稠密语义特征蒸馏'), ('reliability', '语义可靠性修正'),
+                      ('regions', '区域聚合与细化'), ('geometry', '空间一致性修正'),
+                      ('alignment', '稠密图文对齐')]
+        representation = ('三维语言场／索引' if p['primary_direction'] == '3dgs'
+                          else '视频对象语义' if p['primary_direction'] == 'video'
+                          else '像素／区域语义')
+        purpose = ('语言场查询分割' if p['primary_direction'] == '3dgs' else '视频分割'
+                   if p['primary_direction'] == 'video' else '图像语义与实例分割')
+    operation = next((label for key, label in operations if key in probs), '语义构建与查询')
+    return [source, operation, representation, purpose]
 
 
 def validate_methods(papers, root):
@@ -112,7 +143,7 @@ def generate_methods(papers, groups, write):
     for p in papers:
         for m in p['methods']:
             uid = p['paper_id'] + ':' + m['id']
-            records.append({**m, 'uid': uid, 'paper_id': p['paper_id'], 'paper': p['short_name'],
+            records.append({**m, 'overview_route': overview_route(p, m), 'uid': uid, 'paper_id': p['paper_id'], 'paper': p['short_name'],
                             'modality': p['primary_direction'], 'modality_label': groups[p['primary_direction']]})
             rows.append(f'''<tbody class="method-entry" data-method="{E(uid)}">
 <tr><td data-label="论文／模态"><a href="papers/{p['paper_id']}/#method-{E(m['id'])}"><strong>{E(p['short_name'])}</strong></a><small>{E(groups[p['primary_direction']])} · {p['year']}</small></td>
@@ -142,6 +173,8 @@ hide:
 <button id="method-reset" type="button">重置</button></div>
 <section class="route-section" aria-labelledby="route-title"><div class="section-heading"><h2 id="route-title">研究路线</h2><span id="route-count" role="status" aria-live="polite"></span></div>
 <p class="route-help">点击节点或连线，查看对应方法；再次点击取消。路线表示模块的处理路径，不表示论文之间的继承关系。</p>
+<label class="route-level-control">路线粒度<select id="route-level"><option value="overview">问题概览</option><option value="precise">具体模块路径</option></select></label>
+<p class="route-help">问题概览由知识库按研究问题归组，便于总览；具体模块路径保留各篇原文的处理步骤。分组名称不代表论文原创新模块。</p>
 <label class="route-mobile-control">查看相邻阶段<select id="route-segment"><option value="0">语义来源 → 相关操作</option><option value="1">相关操作 → 输出表示</option><option value="2">输出表示 → 预测／用途</option></select></label>
 <div id="route-graph" aria-label="交互方法路线图"></div>
 <div id="route-selection" role="status" aria-live="polite"></div>

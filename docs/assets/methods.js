@@ -29,6 +29,9 @@
   const query = document.getElementById('method-query');
   const segment = document.getElementById('route-segment');
   const params = new URL(location.href).searchParams;
+  const level = document.getElementById('route-level');
+  level.value = params.get('route_level') === 'precise' || (params.has('route') && !params.has('route_level')) ? 'precise' : 'overview';
+  const routeOf = m => level.value === 'precise' ? m.route : (m.overview_route || m.route);
   let track = params.get('track') === 'pointcloud' ? 'pointcloud' : 'vocabulary';
   let selected = null, data, base = [], weights = new Map();
   const entries = new Map([...document.querySelectorAll('.method-entry')].map(el => [el.dataset.method, el]));
@@ -38,13 +41,13 @@
   query.value = params.get('method_query') || '';
   function urlState() {
     const url = new URL(location.href);
-    for(const [key,val] of Object.entries({track,problem:problem.value,modality:modality.value,method_query:query.value,route:selected?.key || ''})) {
+    for(const [key,val] of Object.entries({track,route_level:level.value,problem:problem.value,modality:modality.value,method_query:query.value,route:selected?.key || ''})) {
       if(val) url.searchParams.set(key,val); else url.searchParams.delete(key);
     }
     history.replaceState(null,'',url);
   }
   const uniquePapers = records => new Set(records.map(m=>m.paper_id)).size;
-  const matchSelection = (m,s) => !s || s.indices.every((col,i)=>m.route[col]===s.values[i]);
+  const matchSelection = (m,s) => !s || s.indices.every((col,i)=>routeOf(m)[col]===s.values[i]);
   function selectRoute(s) {
     selected = selected?.key === s?.key ? null : s;
     showRows(); urlState();
@@ -88,7 +91,7 @@
     const cols=mobile?[Number(segment.value),Number(segment.value)+1]:[0,1,2,3];
     const nodesByCol=cols.map(col=>{
       const groups=new Map();
-      base.forEach(m=>{const v=m.route[col];if(!groups.has(v))groups.set(v,[]);groups.get(v).push(m);});
+      base.forEach(m=>{const v=routeOf(m)[col];if(!groups.has(v))groups.set(v,[]);groups.get(v).push(m);});
       return [...groups].map(([label,records])=>({label,records,col,weight:records.reduce((a,m)=>a+weights.get(m.uid),0)}));
     });
     const maxNodes=Math.max(...nodesByCol.map(a=>a.length));
@@ -105,17 +108,17 @@
       nodes.forEach(n=>{Object.assign(n,{x:i*xStep,y,h:34+n.weight*scale,offsetOut:17,offsetIn:17});y+=n.h+gap;});
     });
     const colors=['#358f89','#638fb0','#6b9d80','#9d9a60','#a98096','#8c88aa','#739caa','#b18b65'];
-    const sources=[...new Set(base.map(m=>m.route[0]))];
+    const sources=[...new Set(base.map(m=>routeOf(m)[0]))];
     for(let i=0;i<cols.length-1;i++){
       const groups=new Map();
-      base.forEach(m=>{const k=JSON.stringify([m.route[cols[i]],m.route[cols[i+1]],m.route[0]]);if(!groups.has(k))groups.set(k,[]);groups.get(k).push(m);});
+      base.forEach(m=>{const k=JSON.stringify([routeOf(m)[cols[i]],routeOf(m)[cols[i+1]],routeOf(m)[0]]);if(!groups.has(k))groups.set(k,[]);groups.get(k).push(m);});
       for(const [k,records] of groups){
         const [left,right]=JSON.parse(k),a=nodesByCol[i].find(n=>n.label===left),b=nodesByCol[i+1].find(n=>n.label===right);
         const value=records.reduce((sum,m)=>sum+weights.get(m.uid),0),h=value*scale;
         const x1=a.x+nodeWidth,x2=b.x,ym1=a.y+a.offsetOut,ym2=b.y+b.offsetIn,mid=(x1+x2)/2;
         a.offsetOut+=h;b.offsetIn+=h;
-        const path=svgElement('path',{d:`M${x1},${ym1} C${mid},${ym1} ${mid},${ym2} ${x2},${ym2} L${x2},${ym2+h} C${mid},${ym2+h} ${mid},${ym1+h} ${x1},${ym1+h} Z`,fill:colors[sources.indexOf(records[0].route[0])%colors.length],class:'route-ribbon','data-weight':value,'data-transition':cols[i]});
-        const pairs=new Map([[0,records[0].route[0]],[cols[i],left],[cols[i+1],right]]);
+        const path=svgElement('path',{d:`M${x1},${ym1} C${mid},${ym1} ${mid},${ym2} ${x2},${ym2} L${x2},${ym2+h} C${mid},${ym2+h} ${mid},${ym1+h} ${x1},${ym1+h} Z`,fill:colors[sources.indexOf(routeOf(records[0])[0])%colors.length],class:'route-ribbon','data-weight':value,'data-transition':cols[i]});
+        const pairs=new Map([[0,routeOf(records[0])[0]],[cols[i],left],[cols[i+1],right]]);
         const spec={indices:[...pairs.keys()],values:[...pairs.values()],key:JSON.stringify([...pairs].flat())};
         interactive(path,spec,`${left} → ${right}：${uniquePapers(records)} 篇论文，权重 ${value.toFixed(2)}。${[...new Set(records.map(m=>m.paper))].join('、')}`);ribbons.append(path);
       }
@@ -147,6 +150,7 @@
       try {const a=JSON.parse(params.get('route'));if(Array.isArray(a)&&a.length%2===0&&a.length<=8&&a.every((v,i)=>i%2?typeof v==='string':Number.isInteger(v)&&v>=0&&v<4))selected={indices:a.filter((v,i)=>i%2===0),values:a.filter((v,i)=>i%2===1),key:JSON.stringify(a)};}catch{}
     }
     document.querySelectorAll('[data-track]').forEach(b=>b.onclick=()=>{track=b.dataset.track;refresh();});
+    level.onchange=()=>refresh();
     problem.onchange=modality.onchange=()=>refresh();query.oninput=()=>refresh();segment.onchange=()=>{draw();showRows();};
     document.getElementById('method-reset').onclick=()=>{problem.value=modality.value=query.value='';refresh();};
     document.querySelectorAll('.open-method').forEach(b=>b.onclick=()=>{const row=document.getElementById(b.getAttribute('aria-controls')),open=b.getAttribute('aria-expanded')!=='true';b.setAttribute('aria-expanded',String(open));b.querySelector('span').textContent=open?'−':'＋';row.hidden=!open;});

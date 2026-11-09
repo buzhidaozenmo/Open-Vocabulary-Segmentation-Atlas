@@ -43,7 +43,7 @@ def readme_catalogue(papers):
               f'当前收录 **{n} 篇论文**，其中 **{samples} 篇样例笔记**。'
               '可以直接在 GitHub 阅读下方分类清单、打开原论文和官方代码，或进入仓库内的笔记。\n',
               ' | '.join(f'[{label}](#{anchors[key]})' for key, label in populated),
-              '\n✅ 已查到实际官方实现；❔ 尚未确认官方代码。代码状态不代表已完成运行或复现。'
+              '\n✅ 已查到实际官方实现；🟡 部分公开；❔ 尚未确认官方代码。代码状态不代表已完成运行或复现。'
               '预印本单独标注；“索引”表示尚未完成样例级整理。\n']
     def cell(value):
         return str(value).replace('|', '&#124;').replace('\n', ' ')
@@ -74,7 +74,8 @@ def readme_catalogue(papers):
                '- [数据集与评测设置](docs/benchmarks.md)',
                '- [五篇样例的方法比较](docs/insights.md)',
                '- [研究地图与技术矩阵](https://buzhidaozenmo.github.io/Open-Vocabulary-Segmentation-Atlas/atlas/)',
-               '\n最近核查：**' + max(str(p['checked_on']) for p in papers) + '**。目标约100篇，后续按研究方向持续扩展。\n',
+               '\n最近核查：**' + max(str(p['checked_on']) for p in papers) + '**。'
+               + ('已完成首期100篇收录，后续继续更新方法与来源核查。\n' if n >= 100 else '目标约100篇，后续按研究方向持续扩展。\n'),
                README_END]
     return '\n'.join(chunks)
 
@@ -243,7 +244,7 @@ def generate(papers, taxonomy, relations):
 
 ## 已覆盖与待扩展方向
 
-| 主要方向 | 首批数量 |
+| 主要方向 | 当前数量 |
 | --- | ---: |
 {direction_lines}
 
@@ -272,7 +273,7 @@ graph LR
           + '| 论文 | ' + ' | '.join(taxonomy['techniques'][t] for t in used) + ' |\n'
           + '| --- | ' + ' | '.join('---' for _ in used) + ' |\n' + rows)
     remaining = [p for p in papers if p['content_status'] == 'index']
-    write('remaining.md', '# 其他首批论文\n\n以下条目已建索引，尚未按完整模板精读。\n\n'
+    write('remaining.md', '# 其他论文笔记\n\n以下条目已完成研究关注点、操作证据、方法图与主要实验结果的定向整理，尚未完成样例级全文精读。\n\n'
           + '\n'.join(f'- {link(p)} · {p["venue"]} {p["year"]} · {p["summary"]}' for p in remaining))
 
 

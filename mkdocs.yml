@@ -61,5 +61,5 @@ nav:
       - GeoPurify: papers/geopurify.md
       - CorrCLIPv2: papers/corrclipv2.md
       - EOVSAM: papers/eovsam.md
-      - 其他首批论文: remaining.md
+      - 其他论文笔记: remaining.md
 copyright: 独立研究笔记 · 论文与代码版权归原作者 · 不承诺实验复现
