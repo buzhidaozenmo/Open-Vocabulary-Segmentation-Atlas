@@ -10,7 +10,7 @@
 
 ## 论文目录
 
-当前收录 **15 篇论文**，其中 **5 篇样例笔记**。可以直接在 GitHub 阅读下方分类清单、打开原论文和官方代码，或进入仓库内的笔记。
+当前收录 **17 篇论文**，其中 **5 篇样例笔记**。可以直接在 GitHub 阅读下方分类清单、打开原论文和官方代码，或进入仓库内的笔记。
 
 [3D 点云](#papers-3d) | [2D 图像](#papers-2d) | [视频](#papers-video) | [RGB-D / 多视角](#papers-multiview) | [NeRF / 3DGS](#papers-3dgs)
 
@@ -18,12 +18,13 @@
 
 <a id="papers-3d"></a>
 
-### 3D 点云 · 7 篇
+### 3D 点云 · 8 篇
 
 | 论文 | 发表 | 研究内容 | 官方代码与开放情况 | 笔记 |
 | --- | --- | --- | --- | --- |
 | **GeoGuide**<br>[GeoGuide: Hierarchical Geometric Guidance for Open-Vocabulary 3D Semantic Segmentation](https://arxiv.org/abs/2603.26260) | [CVPR 2026](https://openaccess.thecvf.com/content/CVPR2026/html/Tao_GeoGuide_Hierarchical_Geometric_Guidance_for_Open-Vocabulary_3D_Semantic_Segmentation_CVPR_2026_paper.html) | 从超点、实例内部和实例之间建立几何语义一致性。 | ❔ 尚未找到可核实的官方公开实现入口；不能据此断言作者明确不开源。 | [索引](docs/papers/geoguide.md) |
 | **GeoPurify**<br>[GeoPurify: A Data-Efficient Geometric Distillation Framework for Open-Vocabulary 3D Segmentation](https://arxiv.org/abs/2510.02186) | [ICLR 2026](https://proceedings.iclr.cc/paper_files/paper/2026/hash/039bc8e424e1fc196b4203555b54ebc4-Abstract-Conference.html) | 通过几何关系蒸馏与几何引导池化，净化投影到三维的语义特征。 | ✅ [Code](https://github.com/tj12323/GeoPurify)<br>公开模型、配置、训练和评测脚本；提供ScanNet与Matterport3D检查点入口。 | [样例笔记](docs/papers/geopurify.md) |
+| **CUA-O3D**<br>[Cross-Modal and Uncertainty-Aware Agglomeration for Open-Vocabulary 3D Scene Understanding](https://openaccess.thecvf.com/content/CVPR2025/papers/Li_Cross-Modal_and_Uncertainty-Aware_Agglomeration_for_Open-Vocabulary_3D_Scene_Understanding_CVPR_2025_paper.pdf) | [CVPR 2025](https://openaccess.thecvf.com/content/CVPR2025/html/Li_Cross-Modal_and_Uncertainty-Aware_Agglomeration_for_Open-Vocabulary_3D_Scene_Understanding_CVPR_2025_paper.html) | 分别蒸馏 LSeg、DINOv2、Stable Diffusion，并学习不确定性权重调节异构教师监督。 | ✅ [Code](https://github.com/TyroneLi/CUA_O3D)<br>官方仓库含二维特征提取、多教师蒸馏、评测和跨数据集脚本；本轮未确认完整预训练检查点下载入口，未运行。 | [索引](docs/papers/cua_o3d.md) |
 | **SAS**<br>[SAS: Segment Any 3D Scene with Integrated 2D Priors](https://arxiv.org/abs/2503.08512) | [ICCV 2025](https://openaccess.thecvf.com/content/ICCV2025/html/Li_SAS_Segment_Any_3D_Scene_with_Integrated_2D_Priors_ICCV_2025_paper.html) | 对齐多个二维教师，估计类别能力并融合，再以超点与自蒸馏训练三维模型。 | ✅ [Code](https://github.com/peoplelu/SAS)<br>公开能力构建、特征提取融合与分阶段训练实现；提供预处理特征入口，依赖多个外部教师模型。 | [样例笔记](docs/papers/sas.md) |
 | **RegionPLC**<br>[RegionPLC: Regional Point-Language Contrastive Learning for Open-World 3D Scene Understanding](https://arxiv.org/abs/2304.00962) | [CVPR 2024](https://openaccess.thecvf.com/content/CVPR2024/papers/Yang_RegionPLC_Regional_Point-Language_Contrastive_Learning_for_Open-World_3D_Scene_Understanding_CVPR_2024_paper.pdf) | 以区域级语言监督与对比学习建立更密集的三维语言关联。 | ✅ [Code](https://github.com/CVMI-Lab/PLA/tree/regionplc)<br>实际实现位于 regionplc 分支；与 PLA 主分支分开。 | [索引](docs/papers/regionplc.md) |
 | **OpenMask3D**<br>[OpenMask3D: Open-Vocabulary 3D Instance Segmentation](https://arxiv.org/abs/2306.13631) | [NeurIPS 2023](https://proceedings.neurips.cc/paper_files/paper/2023/hash/d77b5482e38339a8068791d939126be2-Abstract-Conference.html) | 用类别无关三维实例掩码和多视角区域特征进行开放词汇实例分割。 | ✅ [Code](https://github.com/OpenMask3D/openmask3d)<br>公开特征提取、聚合与评测流程；依赖3D掩码模型、SAM等外部权重。 | [索引](docs/papers/openmask3d.md) |
@@ -32,13 +33,14 @@
 
 <a id="papers-2d"></a>
 
-### 2D 图像 · 3 篇
+### 2D 图像 · 4 篇
 
 | 论文 | 发表 | 研究内容 | 官方代码与开放情况 | 笔记 |
 | --- | --- | --- | --- | --- |
 | **CorrCLIPv2**<br>[CorrCLIPv2: Harnessing Unlabeled Images for Open-Vocabulary Semantic Segmentation](https://arxiv.org/abs/2610.24757) | [IJCV 2026](https://link.springer.com/article/10.1007/s11263-026-03027-3) | 重建CLIP相关性，以无标注图像记忆库与多CLIP集成缓解上下文偏差。 | ✅ [Code](https://github.com/zdk258/CorrCLIP/tree/master/CorrCLIPv2)<br>CorrCLIPv2 子目录已提供实际实现、配置、评测和记忆库相关说明。 | [样例笔记](docs/papers/corrclipv2.md) |
 | **EOVSAM**<br>[EOVSAM: Efficient Open-Vocabulary Segmentation with SAM 3 in One Pass](https://arxiv.org/abs/2608.02284) | arXiv 2026<br>**预印本** | 将SAM3适配为单次前向掩码生成器，以注意力聚合支持开放词汇识别。 | ✅ [Code](https://github.com/hustvl/EOVSAM)<br>官方仓库提供训练与语义/全景评测配置、模型入口和SAM3基线流程；未独立验证下载与运行。 | [样例笔记](docs/papers/eovsam.md) |
 | **SAM3**<br>[SAM 3: Segment Anything with Concepts](https://arxiv.org/abs/2511.16719) | [ICLR 2026](https://proceedings.iclr.cc/paper_files/paper/2026/hash/e0982cbc81401df3430ee1ff780dc7a2-Abstract-Conference.html) | 通过文本概念或图像示例分割匹配实例，并支持视频中的身份跟踪。 | ✅ [Code](https://github.com/facebookresearch/sam3)<br>提供推理、微调、示例与检查点入口；权重需按官方访问与许可流程获取。 | [索引](docs/papers/sam3.md) |
+| **Mask-Adapter**<br>[Mask-Adapter: The Devil is in the Masks for Open-Vocabulary Segmentation](https://openaccess.thecvf.com/content/CVPR2025/papers/Li_Mask-Adapter_The_Devil_is_in_the_Masks_for_Open-Vocabulary_Segmentation_CVPR_2025_paper.pdf) | [CVPR 2025](https://openaccess.thecvf.com/content/CVPR2025/html/Li_Mask-Adapter_The_Devil_is_in_the_Masks_for_Open-Vocabulary_Segmentation_CVPR_2025_paper.html) | 用可学习语义激活图聚合 CLIP 区域特征，并用掩码一致性训练改善开放词汇分类。 | ✅ [Code](https://github.com/hustvl/MaskAdapter)<br>官方仓库含 mask_adapter、训练入口、配置和已发布权重表，提供 SAM-2 演示；未运行，未独立验证权重下载。 | [索引](docs/papers/maskadapter.md) |
 
 <a id="papers-video"></a>
 
