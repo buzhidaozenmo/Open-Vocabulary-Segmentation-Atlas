@@ -10,22 +10,26 @@
 
 ## 论文目录
 
-当前收录 **17 篇论文**，其中 **5 篇样例笔记**。可以直接在 GitHub 阅读下方分类清单、打开原论文和官方代码，或进入仓库内的笔记。
+当前收录 **27 篇论文**，其中 **5 篇样例笔记**。可以直接在 GitHub 阅读下方分类清单、打开原论文和官方代码，或进入仓库内的笔记。
 
-[3D 点云](#papers-3d) | [2D 图像](#papers-2d) | [视频](#papers-video) | [RGB-D / 多视角](#papers-multiview) | [NeRF / 3DGS](#papers-3dgs)
+[3D 点云](#papers-3d) | [2D 图像](#papers-2d) | [视频](#papers-video) | [RGB-D / 多视角](#papers-multiview) | [NeRF / 3DGS](#papers-3dgs) | [遥感](#papers-remote)
 
 ✅ 已查到实际官方实现；❔ 尚未确认官方代码。代码状态不代表已完成运行或复现。预印本单独标注；“索引”表示尚未完成样例级整理。
 
 <a id="papers-3d"></a>
 
-### 3D 点云 · 8 篇
+### 3D 点云 · 12 篇
 
 | 论文 | 发表 | 研究内容 | 官方代码与开放情况 | 笔记 |
 | --- | --- | --- | --- | --- |
 | **GeoGuide**<br>[GeoGuide: Hierarchical Geometric Guidance for Open-Vocabulary 3D Semantic Segmentation](https://arxiv.org/abs/2603.26260) | [CVPR 2026](https://openaccess.thecvf.com/content/CVPR2026/html/Tao_GeoGuide_Hierarchical_Geometric_Guidance_for_Open-Vocabulary_3D_Semantic_Segmentation_CVPR_2026_paper.html) | 从超点、实例内部和实例之间建立几何语义一致性。 | ❔ 尚未找到可核实的官方公开实现入口；不能据此断言作者明确不开源。 | [索引](docs/papers/geoguide.md) |
 | **GeoPurify**<br>[GeoPurify: A Data-Efficient Geometric Distillation Framework for Open-Vocabulary 3D Segmentation](https://arxiv.org/abs/2510.02186) | [ICLR 2026](https://proceedings.iclr.cc/paper_files/paper/2026/hash/039bc8e424e1fc196b4203555b54ebc4-Abstract-Conference.html) | 通过几何关系蒸馏与几何引导池化，净化投影到三维的语义特征。 | ✅ [Code](https://github.com/tj12323/GeoPurify)<br>公开模型、配置、训练和评测脚本；提供ScanNet与Matterport3D检查点入口。 | [样例笔记](docs/papers/geopurify.md) |
 | **CUA-O3D**<br>[Cross-Modal and Uncertainty-Aware Agglomeration for Open-Vocabulary 3D Scene Understanding](https://openaccess.thecvf.com/content/CVPR2025/papers/Li_Cross-Modal_and_Uncertainty-Aware_Agglomeration_for_Open-Vocabulary_3D_Scene_Understanding_CVPR_2025_paper.pdf) | [CVPR 2025](https://openaccess.thecvf.com/content/CVPR2025/html/Li_Cross-Modal_and_Uncertainty-Aware_Agglomeration_for_Open-Vocabulary_3D_Scene_Understanding_CVPR_2025_paper.html) | 分别蒸馏 LSeg、DINOv2、Stable Diffusion，并学习不确定性权重调节异构教师监督。 | ✅ [Code](https://github.com/TyroneLi/CUA_O3D)<br>官方仓库含二维特征提取、多教师蒸馏、评测和跨数据集脚本；本轮未确认完整预训练检查点下载入口，未运行。 | [索引](docs/papers/cua_o3d.md) |
+| **Mosaic3D**<br>[Mosaic3D: Foundation Dataset and Model for Open-Vocabulary 3D Segmentation](https://openaccess.thecvf.com/content/CVPR2025/papers/Lee_Mosaic3D_Foundation_Dataset_and_Model_for_Open-Vocabulary_3D_Segmentation_CVPR_2025_paper.pdf) | [CVPR 2025](https://openaccess.thecvf.com/content/CVPR2025/html/Lee_Mosaic3D_Foundation_Dataset_and_Model_for_Open-Vocabulary_3D_Segmentation_CVPR_2025_paper.html) | 由多视图生成三维区域描述配对，再训练语言对齐点云编码器及实例解码器。 | ✅ [Code](https://github.com/NVlabs/Mosaic3D)<br>官方仓库含训练评测、配置、数据处理和 Model Zoo；依赖 Segment3D 等外部模型，未运行或验证权重下载。 | [索引](docs/papers/mosaic3d.md) |
+| **MPEC**<br>[Masked Point-Entity Contrast for Open-Vocabulary 3D Scene Understanding](https://openaccess.thecvf.com/content/CVPR2025/papers/Wang_Masked_Point-Entity_Contrast_for_Open-Vocabulary_3D_Scene_Understanding_CVPR_2025_paper.pdf) | [CVPR 2025](https://openaccess.thecvf.com/content/CVPR2025/html/Wang_Masked_Point-Entity_Contrast_for_Open-Vocabulary_3D_Scene_Understanding_CVPR_2025_paper.html) | 以三维实体为中介，将增强点云视图的一致性与实体语言对齐分开学习。 | ❔ 未找到可核实的官方实现入口；项目页的 Code 尚未链接到实际代码。论文可读，不据此断言作者明确不开源。 | [索引](docs/papers/mpec.md) |
 | **SAS**<br>[SAS: Segment Any 3D Scene with Integrated 2D Priors](https://arxiv.org/abs/2503.08512) | [ICCV 2025](https://openaccess.thecvf.com/content/ICCV2025/html/Li_SAS_Segment_Any_3D_Scene_with_Integrated_2D_Priors_ICCV_2025_paper.html) | 对齐多个二维教师，估计类别能力并融合，再以超点与自蒸馏训练三维模型。 | ✅ [Code](https://github.com/peoplelu/SAS)<br>公开能力构建、特征提取融合与分阶段训练实现；提供预处理特征入口，依赖多个外部教师模型。 | [样例笔记](docs/papers/sas.md) |
+| **MaskClustering**<br>[MaskClustering: View Consensus based Mask Graph Clustering for Open-Vocabulary 3D Instance Segmentation](https://openaccess.thecvf.com/content/CVPR2024/papers/Yan_MaskClustering_View_Consensus_based_Mask_Graph_Clustering_for_Open-Vocabulary_3D_CVPR_2024_paper.pdf) | [CVPR 2024](https://openaccess.thecvf.com/content/CVPR2024/html/Yan_MaskClustering_View_Consensus_based_Mask_Graph_Clustering_for_Open-Vocabulary_3D_CVPR_2024_paper.html) | 用共同观察视角的合并共识构建掩码图，迭代聚类形成三维实例。 | ✅ [Code](https://github.com/PKU-EPIC/MaskClustering)<br>官方仓库含 graph、main.py、evaluation、配置和 CropFormer 权重准备入口；本轮未运行。 | [索引](docs/papers/maskclustering.md) |
+| **Open3DIS**<br>[Open3DIS: Open-Vocabulary 3D Instance Segmentation with 2D Mask Guidance](https://openaccess.thecvf.com/content/CVPR2024/papers/Nguyen_Open3DIS_Open-Vocabulary_3D_Instance_Segmentation_with_2D_Mask_Guidance_CVPR_2024_paper.pdf) | [CVPR 2024](https://openaccess.thecvf.com/content/CVPR2024/html/Nguyen_Open3DIS_Open-Vocabulary_3D_Instance_Segmentation_with_2D_Mask_Guidance_CVPR_2024_paper.html) | 以二维掩码引导超点生长和跨帧合并，再以可见性累积实例语言特征。 | ✅ [Code](https://github.com/VinAIResearch/Open3DIS)<br>官方仓库含实例提议、特征提取、评测、配置与数据准备文档；依赖二维模型及三维提议网络，未运行。 | [索引](docs/papers/open3dis.md) |
 | **RegionPLC**<br>[RegionPLC: Regional Point-Language Contrastive Learning for Open-World 3D Scene Understanding](https://arxiv.org/abs/2304.00962) | [CVPR 2024](https://openaccess.thecvf.com/content/CVPR2024/papers/Yang_RegionPLC_Regional_Point-Language_Contrastive_Learning_for_Open-World_3D_Scene_Understanding_CVPR_2024_paper.pdf) | 以区域级语言监督与对比学习建立更密集的三维语言关联。 | ✅ [Code](https://github.com/CVMI-Lab/PLA/tree/regionplc)<br>实际实现位于 regionplc 分支；与 PLA 主分支分开。 | [索引](docs/papers/regionplc.md) |
 | **OpenMask3D**<br>[OpenMask3D: Open-Vocabulary 3D Instance Segmentation](https://arxiv.org/abs/2306.13631) | [NeurIPS 2023](https://proceedings.neurips.cc/paper_files/paper/2023/hash/d77b5482e38339a8068791d939126be2-Abstract-Conference.html) | 用类别无关三维实例掩码和多视角区域特征进行开放词汇实例分割。 | ✅ [Code](https://github.com/OpenMask3D/openmask3d)<br>公开特征提取、聚合与评测流程；依赖3D掩码模型、SAM等外部权重。 | [索引](docs/papers/openmask3d.md) |
 | **OpenScene**<br>[OpenScene: 3D Scene Understanding with Open Vocabularies](https://arxiv.org/abs/2211.15654) | [CVPR 2023](https://openaccess.thecvf.com/content/CVPR2023/html/Peng_OpenScene_3D_Scene_Understanding_With_Open_Vocabularies_CVPR_2023_paper.html) | 多视角二维特征如何成为可供文本查询的三维点特征。 | ✅ [Code](https://github.com/pengsongyou/openscene)<br>官方实现包含多视角融合、3D蒸馏与评测；提供预训练模型及预处理特征入口。 | [样例笔记](docs/papers/openscene.md) |
@@ -33,22 +37,26 @@
 
 <a id="papers-2d"></a>
 
-### 2D 图像 · 4 篇
+### 2D 图像 · 7 篇
 
 | 论文 | 发表 | 研究内容 | 官方代码与开放情况 | 笔记 |
 | --- | --- | --- | --- | --- |
 | **CorrCLIPv2**<br>[CorrCLIPv2: Harnessing Unlabeled Images for Open-Vocabulary Semantic Segmentation](https://arxiv.org/abs/2610.24757) | [IJCV 2026](https://link.springer.com/article/10.1007/s11263-026-03027-3) | 重建CLIP相关性，以无标注图像记忆库与多CLIP集成缓解上下文偏差。 | ✅ [Code](https://github.com/zdk258/CorrCLIP/tree/master/CorrCLIPv2)<br>CorrCLIPv2 子目录已提供实际实现、配置、评测和记忆库相关说明。 | [样例笔记](docs/papers/corrclipv2.md) |
 | **EOVSAM**<br>[EOVSAM: Efficient Open-Vocabulary Segmentation with SAM 3 in One Pass](https://arxiv.org/abs/2608.02284) | arXiv 2026<br>**预印本** | 将SAM3适配为单次前向掩码生成器，以注意力聚合支持开放词汇识别。 | ✅ [Code](https://github.com/hustvl/EOVSAM)<br>官方仓库提供训练与语义/全景评测配置、模型入口和SAM3基线流程；未独立验证下载与运行。 | [样例笔记](docs/papers/eovsam.md) |
 | **SAM3**<br>[SAM 3: Segment Anything with Concepts](https://arxiv.org/abs/2511.16719) | [ICLR 2026](https://proceedings.iclr.cc/paper_files/paper/2026/hash/e0982cbc81401df3430ee1ff780dc7a2-Abstract-Conference.html) | 通过文本概念或图像示例分割匹配实例，并支持视频中的身份跟踪。 | ✅ [Code](https://github.com/facebookresearch/sam3)<br>提供推理、微调、示例与检查点入口；权重需按官方访问与许可流程获取。 | [索引](docs/papers/sam3.md) |
+| **CLIPer**<br>[CLIPer: Hierarchically Improving Spatial Representation of CLIP for Open-Vocabulary Semantic Segmentation](https://openaccess.thecvf.com/content/ICCV2025/papers/Sun_CLIPer_Hierarchically_Improving_Spatial_Representation_of_CLIP_for_Open-Vocabulary_Semantic_ICCV_2025_paper.pdf) | [ICCV 2025](https://openaccess.thecvf.com/content/ICCV2025/html/Sun_CLIPer_Hierarchically_Improving_Spatial_Representation_of_CLIP_for_Open-Vocabulary_Semantic_ICCV_2025_paper.html) | 融合 CLIP 早层特征，并用扩散模型注意力补足开放词汇预测的局部细节。 | ✅ [Code](https://github.com/linsun449/cliper.code)<br>官方仓库含 modified_clip、diffusion_model、推理脚本及演示；文档说明运行时下载依赖模型，未独立验证。 | [索引](docs/papers/cliper.md) |
+| **COSINE**<br>[Unified Open-World Segmentation with Multi-Modal Prompts](https://openaccess.thecvf.com/content/ICCV2025/papers/Liu_Unified_Open-World_Segmentation_with_Multi-Modal_Prompts_ICCV_2025_paper.pdf) | [ICCV 2025](https://openaccess.thecvf.com/content/ICCV2025/html/Liu_Unified_Open-World_Segmentation_with_Multi-Modal_Prompts_ICCV_2025_paper.html) | 以共享提示对齐器和多模态解码器统一文本及图像提示驱动的分割。 | ✅ [Code](https://github.com/aim-uofa/COSINE)<br>官方仓库含训练、推理、复现说明及 MODEL_ZOO、检查点下载脚本；模型托管依赖外部访问条件，未验证下载。 | [索引](docs/papers/cosine.md) |
 | **Mask-Adapter**<br>[Mask-Adapter: The Devil is in the Masks for Open-Vocabulary Segmentation](https://openaccess.thecvf.com/content/CVPR2025/papers/Li_Mask-Adapter_The_Devil_is_in_the_Masks_for_Open-Vocabulary_Segmentation_CVPR_2025_paper.pdf) | [CVPR 2025](https://openaccess.thecvf.com/content/CVPR2025/html/Li_Mask-Adapter_The_Devil_is_in_the_Masks_for_Open-Vocabulary_Segmentation_CVPR_2025_paper.html) | 用可学习语义激活图聚合 CLIP 区域特征，并用掩码一致性训练改善开放词汇分类。 | ✅ [Code](https://github.com/hustvl/MaskAdapter)<br>官方仓库含 mask_adapter、训练入口、配置和已发布权重表，提供 SAM-2 演示；未运行，未独立验证权重下载。 | [索引](docs/papers/maskadapter.md) |
+| **SC-CLIP**<br>[Self-Calibrated CLIP for Training-Free Open-Vocabulary Segmentation](https://arxiv.org/pdf/2411.15869v3) | [IEEE TIP 2025](https://doi.org/10.1109/TIP.2025.3639996) | 替换异常 token，以 CLIP 中层相似性修正深层聚合，并通过末层对齐融合多层语义。 | ✅ [Code](https://github.com/SuleBai/SC-CLIP)<br>官方仓库含 scclip_segmentor.py、eval.py、配置及演示；方法免任务训练，仍依赖预训练 CLIP，未运行。 | [索引](docs/papers/scclip.md) |
 
 <a id="papers-video"></a>
 
-### 视频 · 2 篇
+### 视频 · 3 篇
 
 | 论文 | 发表 | 研究内容 | 官方代码与开放情况 | 笔记 |
 | --- | --- | --- | --- | --- |
 | **EntitySAM**<br>[EntitySAM: Segment Everything in Video](https://openaccess.thecvf.com/content/CVPR2025/papers/Ye_EntitySAM_Segment_Everything_in_Video_CVPR_2025_paper.pdf) | [CVPR 2025](https://openaccess.thecvf.com/content/CVPR2025/papers/Ye_EntitySAM_Segment_Everything_in_Video_CVPR_2025_paper.pdf) | 以SAM2扩展自动发现和跟踪视频实体；作为类别无关相关任务参考。 | ✅ [Code](https://github.com/ymq2017/entitysam)<br>实体训练、评测代码与检查点已公开；论文的类别命名依赖外部 GPT-4o，不属于开源实体模型本体。 | [索引](docs/papers/entitysam.md) |
+| **OV-DVIS++**<br>[DVIS++: Improved Decoupled Framework for Universal Video Segmentation](https://arxiv.org/pdf/2312.13305v1) | [IEEE TPAMI 2025](https://doi.org/10.1109/TPAMI.2025.3552694) | 在 DVIS++ 中接入冻结 CLIP，以跨帧对象表示完成开放词汇视频分类与分割。 | ✅ [Code](https://github.com/KlingAIResearch/DVIS_Plus)<br>官方 DVIS_Plus 仓库包含 ov_dvis 相关实现、训练评测入口和 Model Zoo；本条聚焦同篇论文的 OV-DVIS++ 扩展，未运行。 | [索引](docs/papers/dvispp.md) |
 | **TROY-VIS**<br>[Towards Real-Time Open-Vocabulary Video Instance Segmentation](https://arxiv.org/abs/2412.04434) | [WACV 2025](https://openaccess.thecvf.com/content/WACV2025/papers/Yan_Towards_Real-Time_Open-Vocabulary_Video_Instance_Segmentation_WACV_2025_paper.pdf) | 通过解耦特征增强、文本缓存与时序插值平衡视频分割精度和速度。 | ✅ [Code](https://github.com/google-research/troyvis)<br>提供实际实现、训练测试文档与模型列表入口。 | [索引](docs/papers/troyvis.md) |
 
 <a id="papers-multiview"></a>
@@ -62,11 +70,20 @@
 
 <a id="papers-3dgs"></a>
 
-### NeRF / 3DGS · 1 篇
+### NeRF / 3DGS · 2 篇
 
 | 论文 | 发表 | 研究内容 | 官方代码与开放情况 | 笔记 |
 | --- | --- | --- | --- | --- |
+| **Dr. Splat**<br>[Dr. Splat: Directly Referring 3D Gaussian Splatting via Direct Language Embedding Registration](https://openaccess.thecvf.com/content/CVPR2025/papers/Jun-Seong_Dr._Splat_Directly_Referring_3D_Gaussian_Splatting_via_Direct_Language_CVPR_2025_paper.pdf) | [CVPR 2025](https://openaccess.thecvf.com/content/CVPR2025/html/Jun-Seong_Dr._Splat_Directly_Referring_3D_Gaussian_Splatting_via_Direct_Language_CVPR_2025_paper.html) | 按渲染贡献直接登记高斯语言特征，以共享乘积量化码本支持三维文本查询。 | ✅ [Code](https://github.com/kaist-ami/Dr-Splat)<br>官方仓库含预处理、特征登记、评测与运行脚本；需先有训练好的场景 3DGS 及外部 SAM／CLIP，未运行。 | [索引](docs/papers/drsplat.md) |
 | **LangSplatV2**<br>[LangSplatV2: High-dimensional 3D Language Gaussian Splatting with 450+ FPS](https://arxiv.org/abs/2507.07136) | [NeurIPS 2025](https://langsplat-v2.github.io/) | 用高效的高维语言高斯表示改善场景文本查询的精度与速度。 | ✅ [Code](https://github.com/ZhaoYujie2002/LangSplatV2)<br>官方仓库提供预处理、训练、多个数据集评测流程及模型/数据入口。 | [索引](docs/papers/langsplatv2.md) |
+
+<a id="papers-remote"></a>
+
+### 遥感 · 1 篇
+
+| 论文 | 发表 | 研究内容 | 官方代码与开放情况 | 笔记 |
+| --- | --- | --- | --- | --- |
+| **SCORE**<br>[SCORE: Scene Context Matters in Open-Vocabulary Remote Sensing Instance Segmentation](https://openaccess.thecvf.com/content/ICCV2025/papers/Huang_SCORE_Scene_Context_Matters_in_Open-Vocabulary_Remote_Sensing_Instance_Segmentation_ICCV_2025_paper.pdf) | [ICCV 2025](https://openaccess.thecvf.com/content/ICCV2025/html/Huang_SCORE_Scene_Context_Matters_in_Open-Vocabulary_Remote_Sensing_Instance_Segmentation_ICCV_2025_paper.html) | 把遥感区域上下文注入实例特征，并以全局场景信息适配文本分类器。 | ✅ [Code](https://github.com/HuangShiqi128/SCORE)<br>官方仓库含 train_net.py、配置、iSAID／SIOR 评测脚本和数据入口；依赖外部 RemoteCLIP 检查点，未运行。 | [索引](docs/papers/score.md) |
 
 ## 两条阅读主线
 

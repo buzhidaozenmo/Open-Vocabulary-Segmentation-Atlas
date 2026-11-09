@@ -10,6 +10,7 @@ PROBLEMS = {
     'reliability': '教师可靠性与语义冲突', 'distillation': '二维到三维特征蒸馏',
     'regions': '区域／超点聚合', 'geometry': '几何一致性与语义净化',
     'temporal': '跨帧语义与记忆', 'efficiency': '语言表示与查询效率',
+    'prompt': '多模态提示交互',
 }
 ORIGINS = {'proposed': '本文提出', 'reused': '沿用已有方法',
            'modified': '在已有方法上修改', 'unverified': '来源未核实'}
