@@ -10,3 +10,4 @@
 - `detailed_sample` 是有证据定位的样例笔记，不等于完整复现；索引条目不冒充精读。
 - 统一临时目录为 `.codex_tmp/`，不得把下载原文、缓存、日志和构建产物提交入库。
 - 修改后运行 `python scripts/build.py --check`。发布依赖 GitHub Actions 的严格校验与构建。
+- 论文元数据变更后先运行 `python scripts/update_readme.py` 同步 GitHub 分类清单；不得手动编辑 README 中的自动生成清单区。

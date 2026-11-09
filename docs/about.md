@@ -35,9 +35,12 @@
 
 源笔记位于 `docs/papers/`。一篇论文一份 Markdown，YAML front matter 记录结构化字段；列表、统计、时间线和矩阵由构建脚本生成。技术和数据集使用 `data/taxonomy.yaml` 中的受控标识。
 
+GitHub README 也按研究方向列出所有论文、官方代码与仓库内笔记入口。它与网站共用论文元数据，更新后先同步清单，再构建网站。
+
 新建条目时复制论文模板，将文件名设为稳定 `paper_id`，替换示例来源与字段。身份核查未完成前保持索引状态，不填造未知作者、数据和公式。标题和会议更新时保持 ID 不变；同一工作的预印本和会议版不重复计数。
 
 ```bash
+.codex_tmp/venv/bin/python scripts/update_readme.py
 .codex_tmp/venv/bin/python scripts/build.py --check
 ```
 

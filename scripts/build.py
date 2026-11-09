@@ -24,6 +24,62 @@ GROUPS = {
     'remote': '遥感', 'medical': '医学影像',
 }
 LEVELS = {'detailed_sample': '样例笔记', 'index': '已建索引'}
+README_START = '<!-- PAPERS:START -->'
+README_END = '<!-- PAPERS:END -->'
+
+
+def readme_catalogue(papers):
+    """Render the GitHub-native catalogue from the same source as the website."""
+    populated = [(key, label) for key, label in GROUPS.items()
+                 if any(p['primary_direction'] == key for p in papers)]
+    anchors = {'3d': 'papers-3d', '2d': 'papers-2d', 'video': 'papers-video',
+               'multiview': 'papers-multiview', '3dgs': 'papers-3dgs',
+               'rgbt': 'papers-rgbt', 'audio': 'papers-audio',
+               'remote': 'papers-remote', 'medical': 'papers-medical'}
+    n = len(papers)
+    samples = sum(p['content_status'] == 'detailed_sample' for p in papers)
+    chunks = [README_START, '\n## 论文目录\n',
+              f'当前收录 **{n} 篇论文**，其中 **{samples} 篇样例笔记**。'
+              '可以直接在 GitHub 阅读下方分类清单、打开原论文和官方代码，或进入仓库内的笔记。\n',
+              ' | '.join(f'[{label}](#{anchors[key]})' for key, label in populated),
+              '\n✅ 已查到实际官方实现；❔ 尚未确认官方代码。代码状态不代表已完成运行或复现。'
+              '预印本单独标注；“索引”表示尚未完成样例级整理。\n']
+    def cell(value):
+        return str(value).replace('|', '&#124;').replace('\n', ' ')
+    for key, label in populated:
+        group = sorted((p for p in papers if p['primary_direction'] == key),
+                       key=lambda p: (-p['year'], p['short_name'].lower()))
+        chunks += [f'<a id="{anchors[key]}"></a>\n\n### {label} · {len(group)} 篇\n',
+                   '| 论文 | 发表 | 研究内容 | 官方代码与开放情况 | 笔记 |',
+                   '| --- | --- | --- | --- | --- |']
+        for p in group:
+            title = f'**{cell(p["short_name"])}**<br>[{cell(p["title"])}]({p["paper_url"]})'
+            venue = f'[{cell(p["venue"])} {p["year"]}]({p["publication_url"]})' if p['publication_url'] else f'arXiv {p["year"]}<br>**预印本**'
+            if p['code_status'] == 'public':
+                code = f'✅ [Code]({p["code_url"]})<br>{cell(p["code_details"])}'
+            elif p['code_status'] == 'partial':
+                code = f'🟡 [部分代码]({p["code_url"]})<br>{cell(p["code_details"])}'
+            else:
+                code = f'❔ {cell(p["code_details"])}'
+            note_label = '样例笔记' if p['content_status'] == 'detailed_sample' else '索引'
+            note = f'[{note_label}](docs/papers/{p["_file"]})'
+            chunks.append('| ' + ' | '.join([title, venue, cell(p['summary']), code, note]) + ' |')
+        chunks.append('')
+    chunks += ['## 数据集与方法比较\n',
+               '- [数据集与评测设置](docs/benchmarks.md)',
+               '- [五篇样例的方法比较](docs/insights.md)',
+               '- [研究地图与技术矩阵](https://buzhidaozenmo.github.io/Open-Vocabulary-Segmentation-Atlas/atlas/)',
+               '\n最近核查：**' + max(str(p['checked_on']) for p in papers) + '**。目标约100篇，后续按研究方向持续扩展。\n',
+               README_END]
+    return '\n'.join(chunks)
+
+
+def synced_readme(papers):
+    current = (ROOT / 'README.md').read_text(encoding='utf-8')
+    if current.count(README_START) != 1 or current.count(README_END) != 1:
+        raise ValueError('README requires exactly one catalogue marker pair')
+    start, end = current.index(README_START), current.index(README_END) + len(README_END)
+    return current[:start] + readme_catalogue(papers) + current[end:]
 
 
 def read_papers():
@@ -285,6 +341,8 @@ def main():
     taxonomy = yaml.safe_load((ROOT / 'data/taxonomy.yaml').read_text())
     relations = yaml.safe_load((ROOT / 'data/paper_relations.yaml').read_text())
     validate(papers, taxonomy, relations)
+    if (ROOT / 'README.md').read_text(encoding='utf-8') != synced_readme(papers):
+        raise ValueError('README catalogue is stale; run python scripts/update_readme.py')
     generate(papers, taxonomy, relations)
     command = [sys.executable, '-m', 'mkdocs', 'serve', '-a', '127.0.0.1:8000'] if args.serve else [sys.executable, '-m', 'mkdocs', 'build', '--strict']
     subprocess.run(command, cwd=ROOT, check=True)
