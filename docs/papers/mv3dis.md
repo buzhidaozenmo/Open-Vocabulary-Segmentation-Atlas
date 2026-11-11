@@ -29,7 +29,7 @@ code_details: 已核对官方实现目录：evaluation、generate_2d_mask_conf.p
   当前仓库升级了二维掩码生成流程，其新增结果与原论文表格分开阅读。
 content_status: index
 checked_on: '2026-11-09'
-module_checked_on: '2026-11-09'
+module_checked_on: '2026-11-11'
 summary: 投影时联合深度一致性与可见性权重，对接近遮挡阈值的可疑点降低贡献；在三维粗实例作为共同参照的多视图掩码对应中使用这些可靠性线索，减少跨对象错误合并。
 sources:
 - url: https://openaccess.thecvf.com/content/CVPR2026/html/Zhao_MV3DIS_Multi-View_Mask_Matching_via_3D_Guides_for_Zero-Shot_3D_CVPR_2026_paper.html
@@ -68,7 +68,8 @@ methods:
   origin: proposed
   origin_note: 本文设计的投影深度可靠性加权流程；所用预训练模型、通用投影及基础算子沿用已有方法，不计作本文新提出。
   evidence:
-  - url: https://openaccess.thecvf.com/content/CVPR2026/papers/Zhao_MV3DIS_Multi-View_Mask_Matching_via_3D_Guides_for_Zero-Shot_3D_CVPR_2026_paper.pdf
+  - &id001
+    url: https://openaccess.thecvf.com/content/CVPR2026/papers/Zhao_MV3DIS_Multi-View_Mask_Matching_via_3D_Guides_for_Zero-Shot_3D_CVPR_2026_paper.pdf
     locator: 方法部分；Figure 3（PDF 第 4 页）；实验 Table 2（PDF 第 7 页）
   figure: fig3
   figure_guide: 看 Figure 3 深度阈值附近遮挡点的权重与可见性；整体匹配流程见 Figure 2。
@@ -80,6 +81,22 @@ methods:
   - 三维分割与查询
   result_tables:
   - table2
+  geometry:
+    families:
+    - visibility
+    - superpoints
+    signal: 点投影深度、图像深度与遮挡阈值，以及三维粗实例参照
+    mechanism: 联合深度一致性和可见性权重降低遮挡边缘可疑点的贡献，在三维参照下匹配多视图掩码。
+    changes: 像素—点对应可靠性与掩码匹配
+    stage: 多视图实例推理
+    semantic_role: 几何负责对应与匹配可靠性；主结果表衡量类别无关掩码，不能当作语言分类分数。
+    route:
+    - 深度与相机几何
+    - 可见性可靠性加权
+    - 跨视图对应
+    - 实例构建
+    evidence:
+    - *id001
 results:
 - id: table2
   label: Table 2

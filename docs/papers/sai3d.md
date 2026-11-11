@@ -31,7 +31,7 @@ code_url: https://github.com/yd-yin/SAI3D
 code_details: 已核对官方实现目录：Semantic-SAM、evaluation、helpers、linetimer.py、openmask3d、sai3d.py。未独立运行或验证外部权重下载。
 content_status: index
 checked_on: '2026-11-09'
-module_checked_on: '2026-11-09'
+module_checked_on: '2026-11-11'
 summary: 将超点投影到各视角掩码，以共同可见且属于同一二维区域的程度建立超点亲和；在几何邻接图上用动态阈值层级区域生长逐步合并，语言分类阶段沿用 OpenMask3D。
 sources:
 - url: https://openaccess.thecvf.com/content/CVPR2024/html/Yin_SAI3D_Segment_Any_Instance_in_3D_Scenes_CVPR_2024_paper.html
@@ -70,7 +70,8 @@ methods:
   origin: proposed
   origin_note: 本文设计的多视角超点亲和流程；所用预训练模型、通用投影及基础算子沿用已有方法，不计作本文新提出。 其中 OpenMask3D 分类／Mask3D 提议的沿用关系在本条具体操作和监督中单独说明。
   evidence:
-  - url: https://openaccess.thecvf.com/content/CVPR2024/papers/Yin_SAI3D_Segment_Any_Instance_in_3D_Scenes_CVPR_2024_paper.pdf
+  - &id001
+    url: https://openaccess.thecvf.com/content/CVPR2024/papers/Yin_SAI3D_Segment_Any_Instance_in_3D_Scenes_CVPR_2024_paper.pdf
     locator: 方法部分；Figure 3（PDF 第 4 页）；实验 Table 3（PDF 第 6 页）
   figure: fig3
   figure_guide: 看 Figure 3 的可见超点投影和同掩码覆盖；层级合并阈值另见 Figure 4。
@@ -85,6 +86,23 @@ methods:
   origin_refs:
   - url: https://arxiv.org/abs/2306.13631
     locator: 原文方法中引用的 OpenMask3D 语义分类流程
+  geometry:
+    families:
+    - superpoints
+    - affinity
+    - visibility
+    signal: 几何超点、空间邻接和多视图掩码可见对应
+    mechanism: 将超点投影到二维掩码计算亲和，在几何邻接图上按动态阈值层级区域生长；几何限制合并候选和实例边界。
+    changes: 超点图边与实例区域
+    stage: 推理实例合并
+    semantic_role: 几何与 SAM 掩码构建实例；语言分类另沿用 OpenMask3D，不是超点直接产生词义。
+    route:
+    - 超点与区域结构
+    - 邻接约束区域生长
+    - 区域邻接图
+    - 实例构建
+    evidence:
+    - *id001
 results:
 - id: table3
   label: Table 3

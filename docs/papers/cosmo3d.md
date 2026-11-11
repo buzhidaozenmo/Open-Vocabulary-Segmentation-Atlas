@@ -34,7 +34,7 @@ code_url: https://github.com/JinLi998/CoSMo3D
 code_details: 已核对官方仓库实际实现目录：app、common、data_test、environment.txt、environment.yml、eval_benchmark。运行及外部权重可用性未独立复现。
 content_status: index
 checked_on: '2026-11-09'
-module_checked_on: '2026-11-09'
+module_checked_on: '2026-11-11'
 summary: 以 Point Transformer 编码形状、SigLIP 编码文本；训练时增加规范坐标嵌入分支，通过语义对比、规范地图锚定和规范包围盒校准约束，使不同姿态下的部件特征对应到稳定的规范空间。
 sources:
 - url: https://openaccess.thecvf.com/content/CVPR2026/html/Jin_CoSMo3D_Open-World_Promptable_3D_Semantic_Segmentation_through_LLM-Guided_Canonical_Spatial_CVPR_2026_paper.html
@@ -75,11 +75,12 @@ methods:
   - url: https://openaccess.thecvf.com/content/CVPR2026/papers/Jin_CoSMo3D_Open-World_Promptable_3D_Semantic_Segmentation_through_LLM-Guided_Canonical_Spatial_CVPR_2026_paper.pdf
     locator: 方法部分列明的基础模型及其参考文献
   evidence:
-  - url: https://openaccess.thecvf.com/content/CVPR2026/papers/Jin_CoSMo3D_Open-World_Promptable_3D_Semantic_Segmentation_through_LLM-Guided_Canonical_Spatial_CVPR_2026_paper.pdf
+  - &id001
+    url: https://openaccess.thecvf.com/content/CVPR2026/papers/Jin_CoSMo3D_Open-World_Promptable_3D_Semantic_Segmentation_through_LLM-Guided_Canonical_Spatial_CVPR_2026_paper.pdf
     locator: 方法部分；Figure 2（PDF 第 3 页）；实验 Table 1（PDF 第 7 页）
   figure: figure2
-  figure_guide: 左侧 Feature Extraction Branch 提取形状和文本特征；右侧 Canonical Embedding Branch 通过 map anchoring、box calibration 与 semantic
-    contrastive 约束规范空间，仅训练时使用。
+  figure_guide: 左侧 Feature Extraction Branch 提取形状和文本特征；右侧 Canonical Embedding Branch 通过 map anchoring、box calibration
+    与 semantic contrastive 约束规范空间，仅训练时使用。
   depicted: true
   route:
   - 点云与部件文本
@@ -88,6 +89,21 @@ methods:
   - 提示分割
   result_tables:
   - table1
+  geometry:
+    families:
+    - canonical
+    signal: 物体规范坐标、规范地图与包围盒监督
+    mechanism: 训练规范嵌入分支，以 map anchoring 和 box calibration 保持空间锚点，并与语义对比约束共同优化，使姿态变化时部件对应更稳定。
+    changes: 部件空间对应与训练约束
+    stage: 训练规范分支；推理特征分支
+    semantic_role: 规范空间为部件语义提供几何锚定；文本特征来自 SigLIP，几何不独立定义部件词义。
+    route:
+    - 规范空间与形状
+    - 规范坐标锚定
+    - 部件空间对应
+    - 部件语义预测
+    evidence:
+    - *id001
 results:
 - id: table1
   label: Table 1

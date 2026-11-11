@@ -77,7 +77,8 @@ methods:
   origin_note: 本文 Uncertainty-Based Superpoint Distillation；本轮未验证官方实现。
   origin_refs: []
   evidence:
-  - url: https://arxiv.org/pdf/2603.26260v1
+  - &id001
+    url: https://arxiv.org/pdf/2603.26260v1
     locator: §3.3.1，Eq.2–4，Figure 4
   figure: fig4
   figure_guide: 独立 USD 图：减去超点均值、拼接、MLP、weight pooling、Cosine Similarity Loss。
@@ -87,6 +88,24 @@ methods:
   - 可靠性加权与选择
   - 超点特征
   - 特征蒸馏
+  geometry:
+    families:
+    - pretrained
+    - superpoints
+    signal: 冻结 Sonata 骨干的几何特征、超点均值及逐点残差
+    mechanism: 把点相对超点均值的残差与几何、二维语义特征结合，估计不确定性／可靠性；以可靠性加权聚合超点语义并约束点—超点一致性。
+    changes: 超点聚合权重与蒸馏目标
+    stage: 二维到三维蒸馏训练
+    semantic_role: 冻结几何先验约束语义学习；类别空间仍来自二维开放词汇教师。
+    route:
+    - 三维预训练表征
+    - 超点可靠性加权
+    - 蒸馏权重与目标
+    - 二维到三维训练
+    evidence:
+    - *id001
+    - url: https://arxiv.org/abs/2603.26260
+      locator: §3.2 冻结骨干 [74]；§4.1 实现细节；参考文献 [74] Sonata
 - id: relations
   track: pointcloud
   problems:
@@ -103,7 +122,8 @@ methods:
   origin_note: 本文 IMR 与 IIRC 两项约束；实例掩码生成器沿用已有方法。
   origin_refs: []
   evidence:
-  - url: https://arxiv.org/pdf/2603.26260v1
+  - &id002
+    url: https://arxiv.org/pdf/2603.26260v1
     locator: §3.3.2–3.3.3，Eq.5–9，Figure 2
   figure: fig2
   figure_guide: 总图右侧中部 IMR 和底部 Inter-Instance Relationship Consistency；原图没有逐项展开所有公式。
@@ -113,7 +133,25 @@ methods:
   - 实例与关系约束
   - 实例特征
   - 几何一致性约束
-module_checked_on: '2026-11-09'
+  geometry:
+    families:
+    - pretrained
+    - affinity
+    signal: 冻结几何骨干提供的实例表征与实例间相似关系
+    mechanism: 在实例内做部分掩码到完整实例的重建，并约束实例级几何与语义相似关系一致，以局部到全局的关系约束蒸馏。
+    changes: 实例表征与实例间关系损失
+    stage: 训练
+    semantic_role: 几何相似性作为结构约束，不等同于两个实例必然属于同一文本类别。
+    route:
+    - 三维预训练表征
+    - 实例关系一致性
+    - 蒸馏权重与目标
+    - 二维到三维训练
+    evidence:
+    - *id002
+    - url: https://arxiv.org/abs/2603.26260
+      locator: §3.2 冻结骨干 [74]；§4.1 实现细节；参考文献 [74] Sonata
+module_checked_on: '2026-11-11'
 results:
 - id: table1
   label: Table 1

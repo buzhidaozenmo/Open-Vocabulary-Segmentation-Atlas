@@ -55,6 +55,10 @@ for method in methods:
         errors.append('Missing module anchor: ' + method['uid'])
     if 'detail-' + method['paper_id'] + '-' + method['id'] not in documents[(ROOT / 'index.html').resolve()].ids:
         errors.append('Missing inline module: ' + method['uid'])
+    if method.get('geometry'):
+        topic = documents.get((ROOT / 'geometry/index.html').resolve())
+        if not topic or 'detail-' + method['paper_id'] + '-' + method['id'] not in topic.ids:
+            errors.append('Missing geometry module: ' + method['uid'])
 if errors:
     raise SystemExit('\n'.join(errors))
 print(f'HTML links, {len(records)} papers and {len(methods)} module destinations verified.')

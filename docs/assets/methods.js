@@ -23,6 +23,8 @@
     dialog.showModal();
   }));
   if (!root) return;
+  const geometryMode = root.dataset.topic === 'geometry';
+  const family = document.getElementById('geometry-source');
   const graph = document.getElementById('route-graph');
   const problem = document.getElementById('method-problem');
   const modality = document.getElementById('method-modality');
@@ -30,8 +32,8 @@
   const segment = document.getElementById('route-segment');
   const params = new URL(location.href).searchParams;
   const level = document.getElementById('route-level');
-  level.value = params.get('route_level') === 'precise' || (params.has('route') && !params.has('route_level')) ? 'precise' : 'overview';
-  const routeOf = m => level.value === 'precise' ? m.route : (m.overview_route || m.route);
+  level.value = geometryMode || params.get('route_level') === 'precise' || (params.has('route') && !params.has('route_level')) ? 'precise' : 'overview';
+  const routeOf = m => geometryMode ? m.geometry.route : level.value === 'precise' ? m.route : (m.overview_route || m.route);
   let track = params.get('track') === 'pointcloud' ? 'pointcloud' : 'vocabulary';
   let selected = null, data, base = [], weights = new Map();
   const entries = new Map([...document.querySelectorAll('.method-entry')].map(el => [el.dataset.method, el]));
@@ -39,9 +41,10 @@
     if ([...el.options].some(o=>o.value===params.get(key))) el.value=params.get(key);
   }
   query.value = params.get('method_query') || '';
+  if (family && [...family.options].some(o=>o.value===params.get('geometry_source'))) family.value=params.get('geometry_source');
   function urlState() {
     const url = new URL(location.href);
-    for(const [key,val] of Object.entries({track,route_level:level.value,problem:problem.value,modality:modality.value,method_query:query.value,route:selected?.key || ''})) {
+    for(const [key,val] of Object.entries({track:geometryMode?'':track,geometry_source:family?.value||'',route_level:geometryMode?'':level.value,problem:problem.value,modality:modality.value,method_query:query.value,route:selected?.key || ''})) {
       if(val) url.searchParams.set(key,val); else url.searchParams.delete(key);
     }
     history.replaceState(null,'',url);
@@ -99,12 +102,13 @@
     const total=uniquePapers(base), gap=12;
     const scale=(height-60-maxNodes*(34+gap))/total;
     const xStep=(width-nodeWidth)/(cols.length-1);
-    const svg=svgElement('svg',{viewBox:`0 0 ${width} ${height}`,class:'route-svg','aria-label':'语义来源、相关操作、输出表示、预测用途的路线图'});
+    const axes=geometryMode?['几何信号来源','如何使用几何','改变的表示／关系','参与的任务环节']:data.axes;
+    const svg=svgElement('svg',{viewBox:`0 0 ${width} ${height}`,class:'route-svg','aria-label':axes.join('、')});
     const ribbons=svgElement('g'), boxes=svgElement('g');svg.append(ribbons,boxes);
     nodesByCol.forEach((nodes,i)=>{
       const used=nodes.reduce((sum,n)=>sum+34+n.weight*scale+gap,0)-gap;
       let y=48+(height-58-used)/2;
-      const heading=svgElement('text',{x:i*xStep+nodeWidth/2,y:22,'text-anchor':'middle',class:'route-axis'});heading.textContent=data.axes[cols[i]];svg.append(heading);
+      const heading=svgElement('text',{x:i*xStep+nodeWidth/2,y:22,'text-anchor':'middle',class:'route-axis'});heading.textContent=axes[cols[i]];svg.append(heading);
       nodes.forEach(n=>{Object.assign(n,{x:i*xStep,y,h:34+n.weight*scale,offsetOut:17,offsetIn:17});y+=n.h+gap;});
     });
     const colors=['#358f89','#638fb0','#6b9d80','#9d9a60','#a98096','#8c88aa','#739caa','#b18b65'];
@@ -137,7 +141,7 @@
   function refresh(preserve=false) {
     if(!preserve)selected=null;
     const terms=query.value.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
-    base=data.methods.filter(m=>m.track===track&&(!problem.value||m.problems.includes(problem.value))&&(!modality.value||m.modality===modality.value)&&terms.every(t=>(JSON.stringify(m)+data.origins[m.origin]).toLocaleLowerCase().includes(t)));
+    base=data.methods.filter(m=>(geometryMode?!!m.geometry:m.track===track)&&(!family?.value||m.geometry?.families.includes(family.value))&&(!problem.value||m.problems.includes(problem.value))&&(!modality.value||m.modality===modality.value)&&terms.every(t=>(JSON.stringify(m)+data.origins[m.origin]).toLocaleLowerCase().includes(t)));
     const counts=new Map();base.forEach(m=>counts.set(m.paper_id,(counts.get(m.paper_id)||0)+1));
     weights=new Map(base.map(m=>[m.uid,1/counts.get(m.paper_id)]));
     document.querySelectorAll('[data-track]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.track===track)));
@@ -151,8 +155,9 @@
     }
     document.querySelectorAll('[data-track]').forEach(b=>b.onclick=()=>{track=b.dataset.track;refresh();});
     level.onchange=()=>refresh();
+    if(family)family.onchange=()=>refresh();
     problem.onchange=modality.onchange=()=>refresh();query.oninput=()=>refresh();segment.onchange=()=>{draw();showRows();};
-    document.getElementById('method-reset').onclick=()=>{problem.value=modality.value=query.value='';refresh();};
+    document.getElementById('method-reset').onclick=()=>{problem.value=modality.value=query.value='';if(family)family.value='';refresh();};
     document.querySelectorAll('.open-method').forEach(b=>b.onclick=()=>{const row=document.getElementById(b.getAttribute('aria-controls')),open=b.getAttribute('aria-expanded')!=='true';b.setAttribute('aria-expanded',String(open));b.querySelector('span').textContent=open?'−':'＋';row.hidden=!open;});
     matchMedia('(max-width:760px)').addEventListener('change',()=>{draw();showRows();});
     refresh(true);

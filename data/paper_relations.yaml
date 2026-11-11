@@ -10,3 +10,33 @@
   label: 显式架构适配
   evidence_url: https://arxiv.org/html/2608.02284v1#Sx3
   locator: EOVSAM Approach / Fig.2
+- source: ptv3
+  target: sonata
+  type: explicit_basis
+  label: 采用 PTv3 编码器
+  evidence_url: https://openaccess.thecvf.com/content/CVPR2025/papers/Wu_Sonata_Self-Supervised_Learning_of_Reliable_Point_Representations_CVPR_2025_paper.pdf
+  locator: Sonata §4.3 Backbone；参考文献 [89]
+- source: msc
+  target: sonata
+  type: explicit_basis
+  label: 明确从 MSC 逐步改造成 Sonata
+  evidence_url: https://openaccess.thecvf.com/content/CVPR2025/papers/Wu_Sonata_Self-Supervised_Learning_of_Reliable_Point_Representations_CVPR_2025_paper.pdf
+  locator: Sonata Figure 6 roadmap、§4
+- source: sonata
+  target: concerto
+  type: explicit_basis
+  label: 沿用三维自蒸馏分支
+  evidence_url: https://arxiv.org/pdf/2510.23607v2
+  locator: Concerto §3.1 Intra-Modal Self-Distillation
+- source: sonata
+  target: geopurify
+  type: explicit_basis
+  label: 冻结为几何关系教师
+  evidence_url: https://arxiv.org/pdf/2510.02186v2
+  locator: GeoPurify §3.3、附录 A.1
+- source: sonata
+  target: geoguide
+  type: explicit_basis
+  label: 冻结为三维几何骨干
+  evidence_url: https://arxiv.org/abs/2603.26260
+  locator: GeoGuide §3.2、§4.1 和参考文献 [74]

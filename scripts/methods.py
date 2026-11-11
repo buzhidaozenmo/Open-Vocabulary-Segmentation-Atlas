@@ -2,6 +2,7 @@
 import html
 import json
 import re
+from geometry import validate_geometry, geometry_facts, generate_geometry
 
 TRACKS = {'vocabulary': '开放词汇能力如何实现', 'pointcloud': '点云语义如何构建与优化'}
 PROBLEMS = {
@@ -20,6 +21,8 @@ E = lambda v: html.escape(str(v), quote=True)
 
 def overview_route(p, m):
     """Editorial grouping for a readable overview; precise source routes remain intact."""
+    if p['task_setting'] in ('self_supervised_representation', 'joint_self_supervised_representation', 'supervised_backbone', 'supervised_segmentation', 'geometric_reconstruction'):
+        return m['route']
     probs = set(m['problems'])
     if m['track'] == 'pointcloud':
         source = '多视角二维语义' if probs & {'projection', 'multiview', 'distillation'} else '点云几何与语言'
@@ -71,6 +74,7 @@ def validate_methods(papers, root):
                 if not result.get(key):
                     raise ValueError(f'{p["paper_id"]}: result table needs {key}')
         for m in p['methods']:
+            validate_geometry(m)
             for key in ('id', 'track', 'problems', 'title', 'question', 'operation', 'input', 'output',
                         'stage', 'supervision', 'origin', 'origin_note', 'evidence', 'figure', 'figure_guide', 'route'):
                 if not m.get(key):
@@ -115,7 +119,7 @@ def detail(p, m, prefix):
     img = prefix + f['asset']
     return f'''<div class="method-expanded">
 <div class="method-explanation"><p class="fact-label">原文方法整理 · {E(p['module_checked_on'])}</p>
-<h3>{E(m['title'])}</h3><p><strong>关注的问题</strong><br>{E(m['question'])}</p>
+<h3>{E(m['title'])}</h3>{geometry_facts(m)}<p><strong>关注的问题</strong><br>{E(m['question'])}</p>
 <p><strong>具体操作</strong><br>{E(m['operation'])}</p>
 <dl><dt>输入</dt><dd>{E(m['input'])}</dd><dt>输出</dt><dd>{E(m['output'])}</dd>
 <dt>使用环节</dt><dd>{E(m['stage'])}</dd><dt>必要监督</dt><dd>{E(m['supervision'])}</dd>
@@ -165,6 +169,8 @@ hide:
 
 从研究问题出发，比较论文中实际使用的操作。模块包含新设计与沿用方法；展开图解可查看方法原图、主要实验结果表、输入输出和原文证据。
 
+[进入 3D 几何专题：表征、超点、可见性与几何约束](geometry.md)
+
 <div id="method-browser">
 <div class="track-tabs" aria-label="阅读主线">{tracks}</div>
 <div class="method-filters"><label>研究问题<select id="method-problem"><option value="">全部问题</option>{problems}</select></label>
@@ -187,3 +193,4 @@ hide:
 
 <p class="scope-note">当前：{len(papers)} 篇论文的 {len(records)} 项定向模块整理，保留 {sum(p['content_status']=='detailed_sample' for p in papers)} 篇样例笔记；未独立复现实验。NeRF／3DGS 按模块内容归类。<a href="library/">按年份、会议与模态浏览论文库</a> · <a href="about/">整理与图示规范</a></p>
 ''')
+    generate_geometry(papers, groups, write, detail)

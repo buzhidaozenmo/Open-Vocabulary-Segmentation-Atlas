@@ -73,7 +73,8 @@ methods:
   origin_note: 本文基础投影与融合步骤；本轮未核查这些通用操作的历史首创来源。
   origin_refs: []
   evidence:
-  - url: https://arxiv.org/pdf/2211.15654v2
+  - &id001
+    url: https://arxiv.org/pdf/2211.15654v2
     locator: §3.1，Figure 3
   figure: fig3
   figure_guide: 看左上多视图到中间 Multi-view Feature Fusion，再到逐点二维特征；主图没有展开深度可见性公式。
@@ -83,6 +84,21 @@ methods:
   - 可见性与跨视角融合
   - 逐点特征
   - 二维到三维传递
+  geometry:
+    families:
+    - visibility
+    signal: 相机内外参、深度与三维点坐标
+    mechanism: 投影到各视图并检查深度遮挡，只平均可见像素传来的语义特征。
+    changes: 像素—点对应与逐点融合特征
+    stage: 训练目标生成／带图像推理
+    semantic_role: 相机几何决定哪些像素向哪些点提供语义；开放词汇空间来自二维教师。
+    route:
+    - 深度与相机几何
+    - 投影与遮挡筛选
+    - 跨视图对应
+    - 二维到三维传递
+    evidence:
+    - *id001
 - id: distill
   track: pointcloud
   problems:
@@ -135,7 +151,7 @@ methods:
   - 可靠性加权与选择
   - 逐点特征
   - 文本相似度分类
-module_checked_on: '2026-11-09'
+module_checked_on: '2026-11-11'
 results:
 - id: table2
   label: Table 2

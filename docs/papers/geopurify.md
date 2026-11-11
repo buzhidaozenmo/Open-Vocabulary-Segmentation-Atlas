@@ -88,8 +88,9 @@ methods:
   - url: https://arxiv.org/abs/2503.16429
     locator: GeoPurify 原文引用 Sonata（Wu et al., 2025）
   evidence:
-  - url: https://arxiv.org/pdf/2510.02186v2
-    locator: §3.2，Figure 2
+  - &id001
+    url: https://arxiv.org/pdf/2510.02186v2
+    locator: §3.3 Geometric Contrastive Distillation、Figure 2；附录 A.1 Sonata 教师
   figure: fig2
   figure_guide: 看左侧虚线训练路径：点云、冻结教师、学生亲和网络、对比蒸馏。
   depicted: true
@@ -98,6 +99,22 @@ methods:
   - 几何关系蒸馏
   - 几何亲和力
   - 语义净化
+  geometry:
+    families:
+    - pretrained
+    - affinity
+    signal: 冻结 Sonata 三维教师的点对特征关系
+    mechanism: 按教师相似性构造正样本、全局负样本和空间近但关系不同的局部难负样本；对比训练轻量学生，而非直接回归教师逐点向量。
+    changes: 学生几何嵌入与亲和关系
+    stage: 训练几何学生
+    semantic_role: Sonata 决定几何关系，二维 VLM 提供待净化的语言语义；几何学生不生成类别名称。
+    route:
+    - 三维预训练表征
+    - 点对关系蒸馏
+    - 点亲和矩阵
+    - 语义净化
+    evidence:
+    - *id001
 - id: pooling
   track: pointcloud
   problems:
@@ -114,8 +131,9 @@ methods:
   origin_note: 本文的 Geometry-Guided Pooling；不是重新训练二维语义教师。
   origin_refs: []
   evidence:
-  - url: https://arxiv.org/pdf/2510.02186v2
-    locator: §3.3–3.4，附录 D.1，Figure 3
+  - &id002
+    url: https://arxiv.org/pdf/2510.02186v2
+    locator: §3.4 Geometry-Guided Pooling、附录 D.1、Figure 3
   figure: fig3
   figure_guide: 独立池化图：保留绿／灰亲和边图例，按初始特征→局部邻域→净化特征阅读。
   depicted: true
@@ -124,7 +142,24 @@ methods:
   - 几何亲和池化
   - 逐点特征
   - 语义净化
-module_checked_on: '2026-11-09'
+  geometry:
+    families:
+    - pretrained
+    - affinity
+    - coordinates
+    signal: 由三维几何学生产生的局部点嵌入与邻域
+    mechanism: 在局部邻域以内积／余弦及 softmax 构造亲和矩阵 A，迭代 F←AF；改变邻居语义传递权重，不重新预测二维类别。
+    changes: 逐点语言特征与局部传播权重
+    stage: 推理语义池化
+    semantic_role: 传播的内容来自二维语言特征；几何只控制哪些点互相传递。
+    route:
+    - 三维预训练表征
+    - 几何亲和池化
+    - 点亲和矩阵
+    - 语义净化
+    evidence:
+    - *id002
+module_checked_on: '2026-11-11'
 results:
 - id: table1
   label: Table 1

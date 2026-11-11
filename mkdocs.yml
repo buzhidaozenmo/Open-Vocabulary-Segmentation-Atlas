@@ -48,6 +48,7 @@ extra_javascript:
   - assets/methods.js
 nav:
   - 方法路线: index.md
+  - 3D 几何: geometry.md
   - 论文库: library.md
   - 研究地图:
       - 方向与时间线: atlas.md

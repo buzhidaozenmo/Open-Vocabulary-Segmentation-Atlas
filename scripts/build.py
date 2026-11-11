@@ -69,13 +69,14 @@ def readme_catalogue(papers):
     chunks += ['## 两条阅读主线\n',
                '- [开放词汇能力如何实现](https://buzhidaozenmo.github.io/Open-Vocabulary-Segmentation-Atlas/?track=vocabulary)：文本编码、视觉语言对齐、区域预测、视频和语言场。',
                '- [点云语义如何构建与优化](https://buzhidaozenmo.github.io/Open-Vocabulary-Segmentation-Atlas/?track=pointcloud)：投影、多视角融合、教师可靠性、蒸馏与几何区域处理。',
+               '- [3D 几何如何被利用](https://buzhidaozenmo.github.io/Open-Vocabulary-Segmentation-Atlas/geometry/)：Sonata / Concerto 表征、空间邻域、超点、可见性、亲和图和规范空间；同时注明几何与类别语义各自的作用。',
                '\n点击路线节点或连线筛选方法，展开查看具体操作、原图和证据。模块在上方各篇论文笔记的元数据维护。\n',
                '## 数据集与方法比较\n',
                '- [数据集与评测设置](docs/benchmarks.md)',
                '- [五篇样例的方法比较](docs/insights.md)',
                '- [研究地图与技术矩阵](https://buzhidaozenmo.github.io/Open-Vocabulary-Segmentation-Atlas/atlas/)',
                '\n最近核查：**' + max(str(p['checked_on']) for p in papers) + '**。'
-               + ('已完成首期100篇收录，后续继续更新方法与来源核查。\n' if n >= 100 else '目标约100篇，后续按研究方向持续扩展。\n'),
+               + (f'当前收录 {n} 篇；几何基础工作单独注明任务范围，后续继续更新方法与来源核查。\n' if n >= 100 else '目标约100篇，后续按研究方向持续扩展。\n'),
                README_END]
     return '\n'.join(chunks)
 
@@ -241,6 +242,8 @@ def generate(papers, taxonomy, relations):
     evidence_lines = '\n'.join(f'- {link(ids[e["source"]])} → {link(ids[e["target"]])}：{e["label"]}。[证据：{e["locator"]}]({e["evidence_url"]})' for e in relations)
     write('atlas.md', f'''
 # 研究方向与时间线
+
+[3D 几何作用专题](geometry.md)：从几何信号、具体操作、改变的表示和参与环节比较方法；下方关系图只显示有原文依据的沿用关系。
 
 ## 已覆盖与待扩展方向
 

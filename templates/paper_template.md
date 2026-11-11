@@ -53,6 +53,18 @@ methods:
     figure_guide: 看哪个区域、连接路径；若操作未画出，明确指出
     route: [语义来源, 相关操作, 输出表示, 预测或用途]  # 替换为具体规范化标签
     result_tables: [table1]  # 可省略；省略时展示本论文全部主结果表
+    # 几何相关模块可增加以下字段，填写后自动进入几何专题；分类见 scripts/geometry.py。
+    # geometry:
+    #   families: [pretrained, affinity]
+    #   signal: 几何信号的具体来源或模型
+    #   mechanism: 如何对应、计算、聚合或约束
+    #   changes: 改变的特征、权重、边、区域或损失
+    #   stage: 预训练／训练／推理
+    #   semantic_role: 类别语义来自哪里；几何负责什么
+    #   route: [几何来源, 使用方式, 改变的表示, 参与环节]
+    #   evidence:
+    #     - url: https://arxiv.org/pdf/REPLACEv1
+    #       locator: 几何操作的章节、公式及引用来源
 results:
   - id: table1
     label: Table 1

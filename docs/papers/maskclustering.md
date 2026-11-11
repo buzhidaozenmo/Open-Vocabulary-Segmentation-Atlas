@@ -33,7 +33,7 @@ code_url: https://github.com/PKU-EPIC/MaskClustering
 code_details: 官方仓库含 graph、main.py、evaluation、配置和 CropFormer 权重准备入口；本轮未运行。
 content_status: index
 checked_on: '2026-11-09'
-module_checked_on: '2026-11-09'
+module_checked_on: '2026-11-11'
 summary: 用共同观察视角的合并共识构建掩码图，迭代聚类形成三维实例。
 sources:
 - url: https://openaccess.thecvf.com/content/CVPR2024/html/Yan_MaskClustering_View_Consensus_based_Mask_Graph_Clustering_for_Open-Vocabulary_3D_CVPR_2024_paper.html
@@ -85,7 +85,8 @@ methods:
   origin_note: 本文 view consensus rate，不是简单两帧 IoU。
   origin_refs: []
   evidence:
-  - url: https://openaccess.thecvf.com/content/CVPR2024/papers/Yan_MaskClustering_View_Consensus_based_Mask_Graph_Clustering_for_Open-Vocabulary_3D_CVPR_2024_paper.pdf
+  - &id001
+    url: https://openaccess.thecvf.com/content/CVPR2024/papers/Yan_MaskClustering_View_Consensus_based_Mask_Graph_Clustering_for_Open-Vocabulary_3D_CVPR_2024_paper.pdf
     locator: §3.2.1–3.2.2，Eq.1–3
   figure: fig3
   figure_guide: 独立共识图中两掩码共被三帧观察、两帧支持，例子给出 2/3 共识；阈值策略另见原文。
@@ -95,6 +96,22 @@ methods:
   - 多视角掩码共识
   - 掩码图
   - 实例构建
+  geometry:
+    families:
+    - visibility
+    - affinity
+    signal: 掩码提升后的三维点集与共同可见帧
+    mechanism: 先确定两掩码的共同观察帧，再统计其中有单个掩码近似包含两者可见点集的支持比例，以共识阈值建立掩码图边。
+    changes: 掩码图边与实例聚类
+    stage: 推理实例构建
+    semantic_role: 几何共视是建立共识边的依据，实例类别另外由语言对齐特征给出。
+    route:
+    - 深度与相机几何
+    - 共视掩码共识
+    - 区域邻接图
+    - 实例构建
+    evidence:
+    - *id001
 - id: clustering
   track: pointcloud
   problems:
